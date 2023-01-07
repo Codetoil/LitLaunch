@@ -2,6 +2,8 @@ plugins {
     id 'java-library'
     id 'groovy'
     id 'idea'
+    id 'vscode'
+    id 'eclipse'
     id 'maven-publish'
     id 'org.cadixdev.licenser' version '0.6.1'
 }
@@ -64,11 +66,12 @@ subprojects((Project localProject) -> {
     apply plugin: 'java-library'
     apply plugin: 'groovy'
     apply plugin: 'idea'
+    apply plugin: 'vscode'
     apply plugin: 'maven-publish'
     apply plugin: 'org.cadixdev.licenser'
 
-    sourceCompatibility = '1.8'
-    targetCompatibility = '1.8'
+    sourceCompatibility = '17'
+    targetCompatibility = '17'
 
     dependencies {
         compileOnlyApi('com.google.code.gson:gson:2.9.1')
