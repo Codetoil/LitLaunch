@@ -1,8 +1,8 @@
 # tool macros
 CC ?= gcc
-CFLAGS := -shared
+CFLAGS := #-shared
 DBGFLAGS := -g
-COBJFLAGS := -c -Wall -Werror -fpic
+COBJFLAGS := -c # -Wall -Werror -fpic
 
 # path macros
 BIN_PATH := bin
