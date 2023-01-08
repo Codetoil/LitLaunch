@@ -1,8 +1,8 @@
 # tool macros
 CC ?= gcc
-CFLAGS := #-shared
+CFLAGS := -shared
 DBGFLAGS := -g
-COBJFLAGS := -c # -Wall -Werror -fpic
+COBJFLAGS := -c -Wall -Werror -fpic
 
 # path macros
 BIN_PATH := bin
@@ -12,6 +12,8 @@ DBG_PATH := debug
 
 # compile macros
 TARGET_NAME := litlaunch-library-api
+VERSION := 0.1.0+build.1
+TARGET_NAME := $(TARGET_NAME)-$(VERSION)
 ifeq ($(OS),Windows_NT)
 	TARGET_NAME := $(addsuffix .dll,$(TARGET_NAME))
 else
@@ -30,10 +32,11 @@ DISTCLEAN_LIST := $(OBJ) \
                   $(OBJ_DEBUG)
 CLEAN_LIST := $(TARGET) \
 			  $(TARGET_DEBUG) \
-			  $(DISTCLEAN_LIST)
+			  $(DISTCLEAN_LIST) \
+			  ../bin/$(TARGET_NAME)
 
 # default rule
-default: clean makedir all
+default: clean makedir all copy
 
 # non-phony targets
 $(TARGET): $(OBJ)
@@ -56,12 +59,17 @@ makedir:
 .PHONY: all
 all: $(TARGET)
 
+.PHONY: copy
+copy: 
+	@echo cp $(BIN_PATH)/$(TARGET_NAME) ../bin
+	@cp $(BIN_PATH)/$(TARGET_NAME) ../bin 
+
 .PHONY: debug
 debug: $(TARGET_DEBUG)
 
 .PHONY: clean
 clean:
-	@echo CLEAN $(CLEAN_LIST)
+	@echo rm -f $(CLEAN_LIST)
 	@rm -f $(CLEAN_LIST)
 
 .PHONY: distclean

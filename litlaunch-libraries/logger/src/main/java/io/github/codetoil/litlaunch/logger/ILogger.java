@@ -5,7 +5,7 @@
 
 package io.github.codetoil.litlaunch.api;
 
-public interface ILogger {
+public interface ILogger extends IComponent {
     void debug(Object obj);
 
     void info(Object obj);

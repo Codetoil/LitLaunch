@@ -9,9 +9,9 @@ package io.github.codetoil.litlaunch.api;
  * Components are important elements of a piece of software that a plugin uses to interface between
  * a piece of software and libraries.
  * For example, for the LitLaunch Minecraft ModLoader, a plugin would be a mod, the software would be
- * Minecraft, a library would be the plugin containing information about blocks, and the component would
- * be an Object representing that block.
+ * Minecraft, a library would be the plugin for creating blocks, and the component would be that block.
  */
 public interface IComponent
 {
+    ILibrary componentOf();
 }

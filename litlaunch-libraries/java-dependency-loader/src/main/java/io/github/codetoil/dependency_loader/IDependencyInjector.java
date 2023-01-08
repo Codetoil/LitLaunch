@@ -14,5 +14,5 @@ import io.github.codetoil.litlaunch.api.IPlugin;
 
 public interface IDependencyInjector
 {
-	void injectPlugins(IPlugin... mods);
+	void injectPlugins(IPlugin... plugins);
 }

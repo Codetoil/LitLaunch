@@ -7,4 +7,5 @@ package io.github.codetoil.litlaunch.api;
 
 public interface IPlugin extends ISoftware
 {
+    ILibrary pluginFor();
 }

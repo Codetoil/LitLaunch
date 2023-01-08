@@ -1,6 +1,7 @@
 {
   "version": "0.2.0",
-  "configurations": [{
+  "configurations": [
+    {
       "name": "C/C++ Runner: Debug Session",
       "type": "cppdbg",
       "request": "launch",
@@ -8,7 +9,7 @@
       "stopAtEntry": false,
       "externalConsole": false,
       "cwd": "/workspaces/LitLaunch/run",
-      "program": "${workspaceFolder}/LitLaunch-C/litlaunch-library-api/bin/litlaunch-library-api.so",
+      "program": "/workspaces/LitLaunch/run/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

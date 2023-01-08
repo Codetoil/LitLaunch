@@ -17,7 +17,7 @@ public class DependencyLoaderLibrary implements ILibrary
 	@Override
 	public String getName()
 	{
-		return "LitLaunch Dependency Loader Library";
+		return "LitLaunch Java Dependency Loader Library";
 	}
 
 	@Override
