@@ -7,7 +7,7 @@ COBJFLAGS := -c # -Wall -Werror -fpic
 # path macros
 BIN_PATH := bin
 OBJ_PATH := obj
-SRC_PATH := src
+SRC_PATH := src/main/c
 DBG_PATH := debug
 
 # compile macros
@@ -33,7 +33,7 @@ CLEAN_LIST := $(TARGET) \
 			  $(DISTCLEAN_LIST)
 
 # default rule
-default: makedir all
+default: clean makedir all
 
 # non-phony targets
 $(TARGET): $(OBJ)

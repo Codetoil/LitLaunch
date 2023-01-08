@@ -7,7 +7,7 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "/workspaces/LitLaunch/LitLaunch-C/Run",
+      "cwd": "/workspaces/LitLaunch/run",
       "program": "${workspaceFolder}/LitLaunch-C/litlaunch-library-api/bin/litlaunch-library-api.so",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",

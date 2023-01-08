@@ -14,16 +14,13 @@ static void print_buf(const char *title, const unsigned char *buf, size_t buf_le
 
 }
 
+ISoftware *s;
+
 int main(void)
 {
-    ISoftware *s = init_library_api();
- 
-    printf("%u\n", s->nameLength);
-    printf("%u\n", s->versionLength);
-    printf("%u\n", s->structLength);
-    printf("%s\n", s->blob);
+    s = init_library_api();
 
-    print_buf("Software Struct", (const unsigned char*) s, s->structLength / sizeof(char));
+    print_buf("LitLaunch Library API Software Struct", (const unsigned char*) s, s->structLength / sizeof(char));
 
     free(s);
     return 0;
