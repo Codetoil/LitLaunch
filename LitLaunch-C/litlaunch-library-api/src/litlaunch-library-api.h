@@ -3,13 +3,13 @@
 #ifndef main_h__
 #define main_h__
 
-struct ISoftware {
+typedef struct SoftwareStruct {
     unsigned int    structLength;
     unsigned int    nameLength;
     unsigned int    versionLength;
     char            blob[0];
-};
+} ISoftware;
 
-extern ISoftware* createSoftwareStruct(ISoftware* s, char name[], char version[]);
+extern ISoftware* createSoftwareStruct(char name[], char version[]);
  
 #endif  // main_h__
