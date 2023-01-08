@@ -26,6 +26,11 @@ import io.github.codetoil.litlaunch.api.library_api.Software;
 
 public class Test {
     public static void main(String[] args) {
-        Pointer<Software> software = LitlaunchLibraryApiLibrary.initLibraryAPI();
+        Pointer<Software> softwarePtr = LitlaunchLibraryApiLibrary.initLibraryAPI();
+        Software software = new Software(softwarePtr);
+        System.out.println(software.size());
+        System.out.println(software.nameLength());
+        System.out.println(software.versionLength());
+        System.out.println(software.blob().getBytes());
     }
 }

@@ -75,7 +75,7 @@ public class Component extends StructObject {
 			Pointer.pointerToCString(name),
 			Pointer.getPointer(library)));
 	}
-	public Component(Pointer pointer) {
+	public Component(Pointer<Component> pointer) {
 		super(pointer);
 	}
 }

@@ -35,5 +35,5 @@ pluginManagement {
     }
 }
 
-include ":litlaunch-libraries:java",":litlaunch-libraries:config",":litlaunch-libraries:event",
-        ":litlaunch-libraries:logger", ":litlaunch-libraries:java-dependency-loader"
+include ":litlaunch-libraries:java"/*,":litlaunch-libraries:config",":litlaunch-libraries:event",
+        ":litlaunch-libraries:logger", ":litlaunch-libraries:java-dependency-loader"*/

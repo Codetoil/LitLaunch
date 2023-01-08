@@ -63,7 +63,7 @@ public class LitlaunchLibrary extends StructObject {
 			Pointer.pointerToCString(name),
 			Pointer.pointerToCString(version)));
 	}
-	public LitlaunchLibrary(Pointer pointer) {
+	public LitlaunchLibrary(Pointer<LitlaunchLibrary> pointer) {
 		super(pointer);
 	}
 }
