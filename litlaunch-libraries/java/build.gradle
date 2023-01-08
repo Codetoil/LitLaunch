@@ -27,11 +27,16 @@ dependencies {
 }
 
 ext {
-   javaMainClass = "io.github.codetoil.litlaunch.test.Test"
+    javaMainClass = "io.github.codetoil.litlaunch.test.Test"
 }
 
 application {
     mainClassName = javaMainClass
+}
+
+run.doFirst {
+    System.out.println(this.rootDir.getAbsolutePath() + "/bin");
+    environment 'LD_LIBRARY_PATH', this.rootDir.getAbsolutePath() + "/bin"
 }
 
 tasks.withType(JavaCompile) {

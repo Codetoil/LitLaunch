@@ -62,6 +62,7 @@ $(TARGET_DEBUG): $(OBJ_DEBUG)
 # phony rules
 .PHONY: makedir
 makedir:
+	@echo mkdir -p $(BIN_PATH) $(OBJ_PATH) $(DBG_PATH)
 	@mkdir -p $(BIN_PATH) $(OBJ_PATH) $(DBG_PATH)
 
 .PHONY: all
