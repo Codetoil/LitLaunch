@@ -1,3 +1,7 @@
+plugins {
+    id "application"
+}
+
 String version1 = "0.1.0+build.0"
 String archives1 = litlaunchId + "-java-library"
 String name1 = 'LitLaunch Java Library'
@@ -22,7 +26,13 @@ dependencies {
     testImplementation 'junit:junit:4.10'
 }
 
+ext {
+   javaMainClass = "io.github.codetoil.litlaunch.test.Test"
+}
 
+application {
+    mainClassName = javaMainClass
+}
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'

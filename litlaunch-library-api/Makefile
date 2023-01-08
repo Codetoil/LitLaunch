@@ -11,18 +11,22 @@ SRC_PATH := src/main/c
 DBG_PATH := debug
 
 # compile macros
-TARGET_NAME := litlaunch-library-api
+
+TARGET_FILENAME := litlaunch-library-api
+
 VERSION := 0.1.0+build.2
 UNAME_S := $(shell uname -s)
 UNAME_P := $(shell uname -p)
-TARGET_NAME := $(TARGET_NAME)-$(VERSION)-$(UNAME_S)-$(UNAME_P)
+TARGET_VERSIONED_FILENAME := $(TARGET_FILENAME)-$(VERSION)-$(UNAME_S)-$(UNAME_P)
 ifeq ($(OS),Windows_NT)
-	TARGET_NAME := $(addsuffix .dll,$(TARGET_NAME))
+	TARGET_FILENAME := $(addsuffix .dll,$(TARGET_FILENAME))
+	TARGET_VERSIONED_FILENAME := $(addsuffix .dll,$(TARGET_VERSIONED_FILENAME))
 else
-	TARGET_NAME := $(addsuffix .so,$(TARGET_NAME))
+	TARGET_FILENAME := $(addsuffix .so,$(TARGET_FILENAME))
+	TARGET_VERSIONED_FILENAME := $(addsuffix .so,$(TARGET_VERSIONED_FILENAME))
 endif
-TARGET := $(BIN_PATH)/$(TARGET_NAME)
-TARGET_DEBUG := $(DBG_PATH)/$(TARGET_NAME)
+TARGET := $(BIN_PATH)/$(TARGET_VERSIONED_FILENAME)
+TARGET_DEBUG := $(DBG_PATH)/$(TARGET_VERSIONED_FILENAME)
 
 # src files & obj files
 SRC := $(foreach x, $(SRC_PATH), $(wildcard $(addprefix $(x)/*,.c*)))
@@ -36,7 +40,8 @@ CLEAN_LIST := $(OBJ) \
 			$(TARGET_DEBUG) \
 			$(DISTCLEAN_LIST) \
 			$(BIN_PATH) \
-			../bin/$(TARGET_NAME)
+			../bin/$(TARGET_VERSIONED_FILENAME) \
+			../bin/$(TARGET_FILENAME)
 
 # default rule
 default: clean makedir all copy
@@ -64,8 +69,10 @@ all: $(TARGET)
 
 .PHONY: copy
 copy: 
-	@echo cp $(BIN_PATH)/$(TARGET_NAME) ../bin
-	@cp $(BIN_PATH)/$(TARGET_NAME) ../bin 
+	@echo cp $(BIN_PATH)/$(TARGET_VERSIONED_FILENAME) ../bin
+	@cp $(BIN_PATH)/$(TARGET_VERSIONED_FILENAME) ../bin
+	@echo cp ../bin/$(TARGET_VERSIONED_FILENAME) ../bin/$(TARGET_FILENAME)
+	@cp ../bin/$(TARGET_VERSIONED_FILENAME) ../bin/$(TARGET_FILENAME)
 
 .PHONY: debug
 debug: $(TARGET_DEBUG)
