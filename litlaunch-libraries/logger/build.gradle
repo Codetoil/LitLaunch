@@ -1,4 +1,4 @@
-Project litlaunchLibraryApi = toProject(project, "litlaunch-library-api")
+Project litlaunchJavaLibrary = toProject(project, "litlaunch-libraries:java")
 Project litlaunchConfigPlugin = toProject(project, "litlaunch-libraries:config")
 
 String version1 = "0.1.0+build.0"
@@ -13,6 +13,5 @@ if (this.parent.parent != null && this.parent.parent.publishing.publications.get
 }
 
 dependencies {
-    api litlaunchLibraryApi
-    api litlaunchConfigPlugin
+    api litlaunchJavaLibrary
 }

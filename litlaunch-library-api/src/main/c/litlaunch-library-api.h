@@ -36,6 +36,6 @@ extern IComponent* createComponentStruct(const char name[], ILibrary* componentL
 extern ISoftware* initLibraryAPI(void);
 
 #define NAME "LitLaunch Library API"
-#define VERSION "0.1.0+build.1"
+#define VERSION "0.1.0+build.2"
 
 #endif  // litlaunch_library_api_h__

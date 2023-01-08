@@ -12,8 +12,10 @@ DBG_PATH := debug
 
 # compile macros
 TARGET_NAME := litlaunch-library-api
-VERSION := 0.1.0+build.1
-TARGET_NAME := $(TARGET_NAME)-$(VERSION)
+VERSION := 0.1.0+build.2
+UNAME_S := $(shell uname -s)
+UNAME_P := $(shell uname -p)
+TARGET_NAME := $(TARGET_NAME)-$(VERSION)-$(UNAME_S)-$(UNAME_P)
 ifeq ($(OS),Windows_NT)
 	TARGET_NAME := $(addsuffix .dll,$(TARGET_NAME))
 else
@@ -28,12 +30,13 @@ OBJ := $(addprefix $(OBJ_PATH)/, $(addsuffix .o, $(notdir $(basename $(SRC)))))
 OBJ_DEBUG := $(addprefix $(DBG_PATH)/, $(addsuffix .o, $(notdir $(basename $(SRC)))))
 
 # clean files list
-DISTCLEAN_LIST := $(OBJ) \
-                  $(OBJ_DEBUG)
-CLEAN_LIST := $(TARGET) \
-			  $(TARGET_DEBUG) \
-			  $(DISTCLEAN_LIST) \
-			  ../bin/$(TARGET_NAME)
+CLEAN_LIST := $(OBJ) \
+			$(OBJ_DEBUG) \
+			$(TARGET) \
+			$(TARGET_DEBUG) \
+			$(DISTCLEAN_LIST) \
+			$(BIN_PATH) \
+			../bin/$(TARGET_NAME)
 
 # default rule
 default: clean makedir all copy
@@ -69,10 +72,5 @@ debug: $(TARGET_DEBUG)
 
 .PHONY: clean
 clean:
-	@echo rm -f $(CLEAN_LIST)
-	@rm -f $(CLEAN_LIST)
-
-.PHONY: distclean
-distclean:
-	@echo CLEAN $(DISTCLEAN_LIST)
-	@rm -f $(DISTCLEAN_LIST)
+	@echo rm -rf $(CLEAN_LIST)
+	@rm -rf $(CLEAN_LIST)

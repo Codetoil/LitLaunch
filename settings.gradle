@@ -16,7 +16,7 @@ pluginManagement {
             url "https://repository.jboss.org/maven2"
         }
         maven {
-            name "Sonatype"
+            name "Sonatype Snapshots"
             url "https://oss.sonatype.org/content/repositories/snapshots/"
         }
         maven {
@@ -24,8 +24,16 @@ pluginManagement {
             url "https://repo1.maven.org/maven2"
         }
         mavenLocal()
+        maven {
+            name "Sonatype Public"
+            url "https://oss.sonatype.org/content/groups/public"
+        }
+        maven {
+            name "Apache"
+            url "https://repo.maven.apache.org/maven2/"
+        }
     }
 }
 
-include ":litlaunch-library-api",":litlaunch-libraries:config",":litlaunch-libraries:event",
-        ":litlaunch-libraries:logger", ":litlaunch-libraries:dependencies", ":litlaunch-libraries:dependency-loader"
+include ":litlaunch-libraries:java",":litlaunch-libraries:config",":litlaunch-libraries:event",
+        ":litlaunch-libraries:logger", ":litlaunch-libraries:java-dependency-loader"

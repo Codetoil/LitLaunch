@@ -1,0 +1,33 @@
+String version1 = "0.1.0+build.0"
+String archives1 = litlaunchId + "-java-library"
+String name1 = 'LitLaunch Java Library'
+
+sourceSets {
+  test {
+    java {
+      srcDirs = ['src/test/java']
+    }
+  }
+}
+
+if (this.parent.parent != null && this.parent.parent.publishing.publications.getNames().contains("maven-java")) {
+    this.parent.parent.publishing.publications.getByName("maven-java").version =
+            version1
+    this.parent.parent.publishing.publications.getByName("maven-java").artifactId =
+            archives1
+}
+
+dependencies {
+    api 'com.nativelibs4java:bridj:0.7.1-SNAPSHOT'
+    testImplementation 'junit:junit:4.10'
+}
+
+
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(Javadoc) {
+    options.encoding = 'UTF-8'
+}
