@@ -162,7 +162,7 @@ allprojects {
     }
 
     license {
-        header = parentProject.file('../HEADER.txt')
+        header = parentProject.file('HEADER.txt')
         include '**/*.java'
         include '**/*.gradle'
         properties {
