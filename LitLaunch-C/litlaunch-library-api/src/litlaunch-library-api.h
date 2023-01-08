@@ -10,6 +10,6 @@ typedef struct SoftwareStruct {
     char            blob[0];
 } ISoftware;
 
-extern ISoftware* createSoftwareStruct(char name[], char version[]);
+extern ISoftware* createSoftwareStruct(const char name[], const char version[]);
  
 #endif  // main_h__
