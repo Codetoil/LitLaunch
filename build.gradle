@@ -5,7 +5,6 @@ plugins {
     id 'idea'
     id 'eclipse'
     id 'maven-publish'
-    id 'org.cadixdev.licenser' version '0.6.1'
     id 'dev.nokee.c-library' apply false
 }
 
@@ -159,18 +158,6 @@ allprojects {
         maven {
             name "Apache"
             url "https://repo.maven.apache.org/maven2/"
-        }
-    }
-
-    license {
-        header = parentProject.file('HEADER.txt')
-        include '**/*.java'
-        include '**/*.gradle'
-        include '**/*.c'
-        include '**/*.h'
-        properties {
-            name = 'Codetoil'
-            year = LocalDate.now().getYear()
         }
     }
 }

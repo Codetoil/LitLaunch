@@ -5,7 +5,6 @@ plugins {
     id "idea"
     id "eclipse"
 }
-apply plugin: 'org.cadixdev.licenser'
 
 String version1 = "0.1.0+build.0"
 archivesBaseName = litlaunchId + "-java-library"
