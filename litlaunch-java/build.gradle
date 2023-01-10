@@ -1,14 +1,16 @@
 plugins {
     id "java"
-    id "java-library"
     id "groovy"
     id "idea"
     id "eclipse"
+    id "dev.nokee.jni-library"
 }
 
 String version1 = "0.1.0+build.0"
 archivesBaseName = litlaunchId + "-java-library"
 String name1 = 'LitLaunch Java Library'
+
+Project litlaunchLibraryApi = toProject(project, "litlaunch-library-api")
 
 sourceSets {
   test {
@@ -26,12 +28,13 @@ if (this.parent != null && this.parent.publishing.publications.getNames().contai
 }
 
 dependencies {
-    api 'com.google.code.gson:gson:2.9.1'
-    api 'com.google.guava:guava:31.1-jre'
-    api 'net.sf.jopt-simple:jopt-simple:5.0.4'
-    api 'org.apache.logging.log4j:log4j-core:2.18.0'
-    api 'org.apache.commons:commons-lang3:3.12.0'
-    api 'com.nativelibs4java:bridj:0.7.1-SNAPSHOT'
+    nativeImplementation litlaunchLibraryApi
+    jvmImplementation 'com.google.code.gson:gson:2.9.1'
+    jvmImplementation 'com.google.guava:guava:31.1-jre'
+    jvmImplementation 'net.sf.jopt-simple:jopt-simple:5.0.4'
+    jvmImplementation 'org.apache.logging.log4j:log4j-core:2.18.0'
+    jvmImplementation 'org.apache.commons:commons-lang3:3.12.0'
+    jvmImplementation 'com.nativelibs4java:bridj:0.7.1-SNAPSHOT'
     testImplementation 'junit:junit:4.10'
 }
 
