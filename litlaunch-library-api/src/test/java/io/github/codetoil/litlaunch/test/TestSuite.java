@@ -19,39 +19,25 @@
 
 package io.github.codetoil.litlaunch.test;
 
-import org.bridj.Pointer;
-
-import io.github.codetoil.litlaunch.api.library_api.LitlaunchLibraryApiLibrary;
-import io.github.codetoil.litlaunch.api.library_api.Software;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import io.github.codetoil.litlaunch.api.LitLaunchLibraryApi;
+import io.github.codetoil.litlaunch.api.Software;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("Testing suite")
-public class Main {
-    Pointer<Software> softwarePtr = LitlaunchLibraryApiLibrary.initLibraryAPI();
-    Software software = new Software(softwarePtr);
+public class TestSuite {
+    Software libraryApiSoftware = LitLaunchLibraryApi.initLibraryApi();
 
     @Test
-    void checkSize() {
-        assertEquals(0, software.size());
+    void checkName() {
+        assertEquals("LitLaunch Library API", libraryApiSoftware.getName());
     }
 
     @Test
-    void checkNameLength() {
-        assertEquals(0, software.nameLength());
-
-    }
-
-    @Test
-    void checkVersionLength() {
-        assertEquals(0, software.versionLength());
-    }
-
-    @Test
-    void checkBlob() {
-        assertEquals("", software.blob().getBytes().toString());
+    void checkVersion() {
+        assertEquals("0.1.0+build.2", libraryApiSoftware.getVersion());
     }
 }
