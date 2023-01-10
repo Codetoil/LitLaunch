@@ -1,10 +1,12 @@
 plugins {
-    id 'java-library'
+	id 'java'
+    id 'dev.nokee.c-language'
     id 'groovy'
     id 'idea'
     id 'eclipse'
     id 'maven-publish'
     id 'org.cadixdev.licenser' version '0.6.1'
+    id 'dev.nokee.c-library' apply false
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -66,32 +68,27 @@ static Project toProject(Object thisProject, String projectName)
 Project parentProject = this.getProject();
 
 subprojects((Project localProject) -> {
-    apply plugin: 'java-library'
-    apply plugin: 'groovy'
-    apply plugin: 'idea'
     apply plugin: 'maven-publish'
-    apply plugin: 'org.cadixdev.licenser'
+	apply plugin: 'dev.nokee.c-language'
 
-
-
-    dependencies {
+    /*dependencies {
         compileOnlyApi('com.google.code.gson:gson:2.9.1')
         compileOnlyApi('com.google.guava:guava:31.1-jre')
         compileOnlyApi('net.sf.jopt-simple:jopt-simple:5.0.4')
         compileOnlyApi('org.apache.logging.log4j:log4j-core:2.18.0')
         compileOnlyApi('org.apache.commons:commons-lang3:3.12.0')
-    }
+    }*/
 
     localProject.group = parentProject.litlaunchGroup + "." + parentProject.litlaunchId
     localProject.version = localProject.findProperty("version1")
-    localProject.archivesBaseName = localProject.findProperty("archive1")
 })
 
 subprojects.forEach((Project localProject) -> {
     publishing {
         publications {
-            if (!localProject.getName().equals("litlaunch-libraries") && !localProject.getName().equals("LitLaunch")
-                && (parent == null))
+            if (!localProject.getName().equals("LitLaunch")
+                && (parent == null)
+                && localProject.components.hasProperty("java"))
             {
                 create("maven-" + localProject.getName(), MavenPublication) {
                     pom {
@@ -131,6 +128,10 @@ allprojects {
         google()
         mavenCentral()
         maven {
+            name "Nokee Repository"
+            url "https://repo.nokee.dev/release"
+        }
+        maven {
             name "Gradle Plugins"
             url "https://plugins.gradle.org/m2/"
         }
@@ -165,6 +166,8 @@ allprojects {
         header = parentProject.file('HEADER.txt')
         include '**/*.java'
         include '**/*.gradle'
+        include '**/*.c'
+        include '**/*.h'
         properties {
             name = 'Codetoil'
             year = LocalDate.now().getYear()

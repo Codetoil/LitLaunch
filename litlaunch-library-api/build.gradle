@@ -1,0 +1,5 @@
+apply plugin: "dev.nokee.c-library"
+
+String version1 = "0.1.0+build.2"
+String archives1 = litlaunchId + "-library-api"
+String name1 = 'LitLaunch Library API'

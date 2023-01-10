@@ -1,0 +1,25 @@
+plugins {
+    id "java"
+    id "java-library"
+    id "groovy"
+    id "idea"
+    id "eclipse"
+}
+apply plugin: 'org.cadixdev.licenser'
+
+Project litlaunchJavaLibrary = toProject(project, "litlaunch-java")
+
+String version1 = "0.1.0+build.0"
+archivesBaseName = litlaunchId + "-event-library"
+String name1 = 'LitLaunch Event Library'
+
+if (this.parent != null && this.parent.publishing.publications.getNames().contains("litlaunch-event")) {
+    this.parent.publishing.publications.getByName("litlaunch-event").version =
+            version1
+    this.parent.publishing.publications.getByName("litlaunch-event").artifactId =
+            archivesBaseName
+}
+
+dependencies {
+    api litlaunchJavaLibrary
+}
