@@ -24,16 +24,34 @@ import org.bridj.Pointer;
 import io.github.codetoil.litlaunch.api.library_api.LitlaunchLibraryApiLibrary;
 import io.github.codetoil.litlaunch.api.library_api.Software;
 
-public class Test {
-    public static void main(String[] args) {
-        Pointer<Software> softwarePtr = LitlaunchLibraryApiLibrary.initLibraryAPI();
-        Software software = new Software(softwarePtr);
-        System.out.println(Integer.toHexString(software.size()));
-        System.out.println(Integer.toHexString(software.nameLength()));
-        System.out.println(Integer.toHexString(software.versionLength()));
-        System.out.println(softwarePtr);
-        for (int i = 0; i < 10; i++) {
-            System.out.println(softwarePtr.getChars(0));
-        }
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@DisplayName("Testing suite")
+public class Main {
+    Pointer<Software> softwarePtr = LitlaunchLibraryApiLibrary.initLibraryAPI();
+    Software software = new Software(softwarePtr);
+
+    @Test
+    void checkSize() {
+        assertEquals(0, software.size());
+    }
+
+    @Test
+    void checkNameLength() {
+        assertEquals(0, software.nameLength());
+
+    }
+
+    @Test
+    void checkVersionLength() {
+        assertEquals(0, software.versionLength());
+    }
+
+    @Test
+    void checkBlob() {
+        assertEquals("", software.blob().getBytes().toString());
     }
 }

@@ -21,7 +21,6 @@ package io.github.codetoil.litlaunch.api.library_api;
 import org.bridj.BridJ;
 import org.bridj.Pointer;
 import org.bridj.StructObject;
-import org.bridj.ann.Array;
 import org.bridj.ann.Field;
 import org.bridj.ann.Library;
 /**
