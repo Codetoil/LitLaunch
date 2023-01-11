@@ -3,19 +3,18 @@ typedef struct SoftwareStruct ISoftware;
 #include "litlaunch-library-api.h"
 
 ISoftware* createSoftwareStruct(const char name[], const char version[]) {
-    int blobSize = sizeof(char) * (strlen(name) + strlen(version));
-    char *blob = malloc(blobSize);
-    strcpy(blob, name);
-    strcat(blob, version);
+    ISoftware* s = malloc(sizeof(*s));
+    utstring_new(s->name);
+    utstring_new(s->version);
+    utstring_printf(s->name, name);
+    utstring_printf(s->version, version);
 
-    int size = sizeof(ISoftware) + blobSize;
-    ISoftware* s = malloc(size);
-    s->nameLength = strlen(name);
-    s->versionLength = strlen(version);
-
-    strcpy(s->blob, blob);
-    free(blob);
-
-    s->size = size;
+    s->size = sizeof(*s);
     return s;
+}
+
+void freeSoftwareStruct(ISoftware* software) {
+    utstring_free(software->name);
+    utstring_free(software->version);
+    free(software);
 }

@@ -6,7 +6,12 @@
     "string.h": "c",
     "litlaunch-library-api.h": "c",
     "stdio.h": "c",
-    "stdlib.h": "c"
+    "stdlib.h": "c",
+    "jni.h": "c",
+    "uthash.h": "c",
+    "java_bindings.h": "c",
+    "java-bindings.h": "c",
+    "utstring.h": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",

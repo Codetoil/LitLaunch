@@ -1,57 +1,22 @@
 plugins {
-    id "java"
-    id "dev.nokee.jni-library"
-    id "dev.nokee.c-language"
-    id "groovy"
+    id "dev.nokee.c-library"
     id "idea"
     id "eclipse"
 }
 
 String version1 = "0.1.0+build.2"
-archivesBaseName = litlaunchId + "-library-api"
+String archives1 = litlaunchId + "-library-api"
 String name1 = 'LitLaunch Library API'
-
-Project litlaunchLibraryApi = toProject(project, "litlaunch-library-api")
-
-sourceSets {
-  test {
-    java {
-      srcDirs = ['src/test/java']
-    }
-  }
-}
 
 if (this.parent != null && this.parent.publishing.publications.getNames().contains("litlaunch-library-api")) {
     this.parent.publishing.publications.getByName("litlaunch-library-api").version =
             version1
     this.parent.publishing.publications.getByName("litlaunch-library-api").artifactId =
-            archivesBaseName
+            archives1
 }
 
-dependencies {
-    nativeImplementation litlaunchLibraryApi
-    // jvmImplementation 'com.google.code.gson:gson:2.10.1'
-    // jvmImplementation 'com.google.guava:guava:31.1-jre'
-    // jvmImplementation 'net.sf.jopt-simple:jopt-simple:5.0.4'
-    // jvmImplementation 'org.apache.logging.log4j:log4j-core:2.19.0'
-    // jvmImplementation 'org.apache.commons:commons-lang3:3.12.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-}
-
-/*run.doFirst {
-    System.out.println(this.rootDir.getAbsolutePath() + "/bin");
-    environment 'LD_LIBRARY_PATH', this.rootDir.getAbsolutePath() + "/bin"
-}*/
-
-test {
-    useJUnitPlatform()
-}
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
-
-tasks.withType(Javadoc) {
-    options.encoding = 'UTF-8'
+library {
+    targetMachines = [
+        machines.linux.x86_64
+    ]
 }

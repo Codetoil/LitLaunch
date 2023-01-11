@@ -5,10 +5,12 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${JAVA_HOME}/include",
-                "${JAVA_HOME}/include/linux"
+                "${JAVA_HOME}/include/linux",
+                "${workspaceFolder}/litlaunch-library-api/src/main/headers",
+                "${workspaceFolder}/litlaunch-library-api/src/main/public"
             ],
             "compilerPath": "/usr/bin/gcc",
-            "cStandard": "${default}",
+            "cStandard": "c99",
             "cppStandard": "${default}",
             "intelliSenseMode": "linux-gcc-x64",
             "compilerArgs": [
