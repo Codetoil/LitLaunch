@@ -3,35 +3,33 @@
 #include <string.h>
 #include <stdlib.h>
 
-typedef struct SoftwareStruct {
-    unsigned int    size;
-    void*           name;       //UT_string
-    void*           version;    //UT_string
-} ISoftware;
+typedef enum EnumDependencyRequirement {
+    INCOMPATIBLE = -1,
+    COMPATIBLE = 0,
+    REQUIRED = 1
+} DependencyRequirement;
 
-typedef struct LibraryStruct ILibrary;
+typedef enum EnumVersionRequirement {
+    TOO_OLD = -1,
+    OK_VER = 0,
+    TOO_NEW = 1
+} VersionRequirement;
 
-typedef struct LibraryStruct {
-    unsigned int    size;
-    ISoftware*      info;
-    ILibrary*       parentLibrary;
-} ILibrary;
+typedef struct ResourceLocationStruct ResourceLocation;
+typedef VersionRequirement (*VersionValidFunc) (const char* input);
 
-/* typedef struct ComponentStruct {
-    unsigned int    size;
-    unsigned int    nameLength;
-    ILibrary*       componentLibrary;
-    char            blob[0];
-} IComponent; */
+typedef struct ComponentTemplateDictStruct ComponentTemplateDict;
+typedef struct DependencyDictStruct DependencyDict;
 
-extern ISoftware* createSoftwareStruct(const char name[], const char version[]);
-extern ILibrary* createLibraryStruct(const char name[], const char version[], ILibrary* parentLibrary);
-extern void freeSoftwareStruct(ISoftware* software);
-extern void freeLibraryStruct(ILibrary* library);
+typedef struct DependencyStruct Dependency;
 
-// extern IComponent* createComponentStruct(const char name[], ILibrary* componentLibrary);
+typedef struct ComponentTemplateStruct ComponentTemplate;
+typedef struct LibraryTemplateStruct LibraryTemplate;
 
-extern ISoftware* initLibraryAPI(void);
+typedef struct ComponentImplStruct ComponentImpl;
+typedef struct LibraryImplStruct LibraryImpl;
+
+// extern ISoftware* initLibraryAPI(void);
 
 #define NAME "LitLaunch Library API"
 #define VERSION "0.1.0+build.2"

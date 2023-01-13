@@ -1,0 +1,20 @@
+plugins {
+    id "dev.nokee.c-application"
+    id "idea"
+    id "eclipse"
+}
+
+String version1 = "0.1.0+build.0"
+String archives1 = litlaunchId + "-library-api-test"
+String name1 = 'LitLaunch Library API Test'
+
+Project parentProject = this.getParent();
+
+application {
+    targetMachines = [
+        machines.linux.x86_64
+    ]
+    dependencies {
+        implementation parentProject
+    }
+}

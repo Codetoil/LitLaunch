@@ -46,5 +46,5 @@ pluginManagement {
     }
 }
 
-include ":litlaunch-library-api"/*,":litlaunch-config",":litlaunch-event",
+include ":litlaunch-library-api", ":litlaunch-library-api:test"/*,":litlaunch-config",":litlaunch-event",
         ":litlaunch-logger", ":litlaunch-java-dependency-loader"*/
