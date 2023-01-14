@@ -13,7 +13,8 @@
     "java-bindings.h": "c",
     "utstring.h": "c",
     "litlaunch-internal.h": "c",
-    "utarray.h": "c"
+    "utarray.h": "c",
+    "libraries.h": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",
