@@ -35,7 +35,7 @@ typedef struct ComponentImplStruct ComponentImpl;
 typedef struct LibraryImplStruct LibraryImpl;
 
 #define LITLAUNCH_LIBRARY_API_NAME "LitLaunch Library API"
-#define LITLAUNCH_LIBRARY_API_VERSION "0.1.0+build.2"
+#define LITLAUNCH_LIBRARY_API_VERSION "0.1.0+build.3"
 
 extern LibraryImpl *initLibraryApi(void);
 
