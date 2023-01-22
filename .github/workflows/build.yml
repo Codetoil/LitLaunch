@@ -42,5 +42,5 @@ jobs:
         with:
           name: Artifacts
           path: |
-            litlaunch-library-api/build/lib/**/
-            litlaunch-library-api/test/build/lib/**/
+            litlaunch-library-api/build/lib/**/**.so
+            litlaunch-library-api/test/build/lib/**/**
