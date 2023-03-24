@@ -1,6 +1,7 @@
 #pragma once
 
 #include "litlaunch-library-api.h"
+#include "registries.h"
 #include "uthash/utstring.h"
 
 struct LibraryTemplateStruct

@@ -17,6 +17,7 @@ if (this.parent != null && this.parent.publishing.publications.getNames().contai
 
 library {
     targetMachines = [
-        machines.linux.x86_64
+        machines.linux.x86_64,
+        machines.windows.x86, machines.windows.x86_64
     ]
 }

@@ -1,8 +1,5 @@
 #pragma once
 
-#include <string.h>
-#include <stdlib.h>
-
 typedef enum EnumDependencyRequirement
 {
     INCOMPATIBLE = -1,
@@ -39,8 +36,9 @@ typedef struct LibraryImplStruct LibraryImpl;
 
 extern LibraryImpl *initLibraryApi(void);
 
-extern LibraryImpl *createLibraryImpl(ResourceLocation *id, const char version[], LibraryTemplate *template);
-extern void freeLibraryImpl(LibraryImpl *ptr);
+extern LibraryImpl *createLibraryImpl(ResourceLocation *id, const char version[], LibraryTemplate *_template);
+extern void freeLibraryImplVersion(LibraryImpl *ptr);
 
 extern ResourceLocation *createResourceLocation(const char _namespace[], const char _path[]);
-extern void freeResourceLocation(ResourceLocation *ptr);
+extern void freeResourceLocationNamespace(ResourceLocation *ptr);
+extern void freeResourceLocationPath(ResourceLocation *ptr);
