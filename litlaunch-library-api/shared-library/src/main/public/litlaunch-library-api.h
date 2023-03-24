@@ -37,8 +37,12 @@ typedef struct LibraryImplStruct LibraryImpl;
 extern LibraryImpl *initLibraryApi(void);
 
 extern LibraryImpl *createLibraryImpl(ResourceLocation *id, const char version[], LibraryTemplate *_template);
+extern const char* getLibraryImplVersion(LibraryImpl* ptr);
+extern ResourceLocation *getLibraryImplResourceLocation(LibraryImpl *ptr);
 extern void freeLibraryImplVersion(LibraryImpl *ptr);
 
 extern ResourceLocation *createResourceLocation(const char _namespace[], const char _path[]);
+extern const char* getResourceLocationNamespace(ResourceLocation *ptr);
+extern const char* getResourceLocationPath(ResourceLocation *ptr);
 extern void freeResourceLocationNamespace(ResourceLocation *ptr);
 extern void freeResourceLocationPath(ResourceLocation *ptr);

@@ -21,6 +21,18 @@ LibraryImpl *createLibraryImpl(ResourceLocation *id, const char version[], Libra
     utstring_new(impl->implementationVersion);
     utstring_printf(impl->implementationVersion, version);
     impl->libraryTemplate = _template;
+
+    return impl;
+}
+
+const char* getLibraryImplVersion(LibraryImpl* ptr)
+{
+    return utstring_body(ptr->implementationVersion);
+}
+
+ResourceLocation *getLibraryImplResourceLocation(LibraryImpl *ptr)
+{
+    return ptr->implementationId;
 }
 
 void freeLibraryImplVersion(LibraryImpl *ptr)
@@ -35,7 +47,20 @@ ResourceLocation *createResourceLocation(const char _namespace[], const char _pa
     utstring_new(loc->_path);
     utstring_printf(loc->_namespace, _namespace);
     utstring_printf(loc->_path, _path);
+
+    return loc;
 }
+
+const char* getResourceLocationNamespace(ResourceLocation *ptr)
+{
+    return utstring_body(ptr->_namespace);
+}
+
+const char* getResourceLocationPath(ResourceLocation *ptr)
+{
+    return utstring_body(ptr->_path);
+}
+
 
 void freeResourceLocationNamespace(ResourceLocation *ptr)
 {

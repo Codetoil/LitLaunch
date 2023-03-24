@@ -21,7 +21,7 @@ class ProjectChecker {
         this.projectName = projectName
     }
 
-    Project lookForProjectGivenPrefix(Project thisProject, String prefix)
+    Project lookForProjectGivenPrefix(Object thisProject, String prefix)
     {
         Project projectObject;
         if (projectObject == null) {
@@ -43,7 +43,7 @@ class ProjectChecker {
         return projectObject;
     }
 
-    Project lookForProject(Project thisProject)
+    Project lookForProject(Object thisProject)
     {
         Project projectObject;
         projectObject = this.lookForProjectGivenPrefix(thisProject, "")
