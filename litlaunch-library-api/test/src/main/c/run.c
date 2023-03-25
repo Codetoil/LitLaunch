@@ -13,18 +13,16 @@ int main()
 
     LibraryImpl* libApiImpl = initLibraryApi();
     ResourceLocation* libApiImplLoc = getLibraryImplResourceLocation(libApiImpl);
+    const char* libApiImplLocStr = resourceLocationToString(libApiImplLoc);
     const char* libApiImplVersion = getLibraryImplVersion(libApiImpl);
-    const char* libApiImplNamespace = getResourceLocationNamespace(libApiImpl);
-    const char* libApiImplPath = getResourceLocationPath(libApiImpl);
 
-    printf("LitLaunch Library API Implementation: \n");
-    printf("\t", libApiImplNamespace, ":", libApiImplPath, "\n");
-    printf("\t", libApiImplVersion, "\n");
-
+    printf("LitLaunch Library API Implementation:\n");
+    printf("\tResourceLocation: %s\n", libApiImplLocStr);
+    printf("\tVersion: %s\n", libApiImplVersion);
+    
+    free(libApiImplLocStr);
     freeLibraryImplVersion(libApiImpl);
-    freeResourceLocationNamespace(libApiImplLoc);
-    freeResourceLocationPath(libApiImplLoc);
-    free(libApiImplLoc);
+    freeResourceLocation(libApiImplLoc);
     free(libApiImpl);
     return 0;
 }

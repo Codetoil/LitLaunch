@@ -6,7 +6,7 @@
 LibraryImpl *initLibraryApi(void)
 {
     LibraryTemplate *litlaunchLibraryApiTemplate = NULL; //createLibraryTemplate();
-    ResourceLocation *location = createResourceLocation("litlaunch", LITLAUNCH_LIBRARY_API_NAME);
+    ResourceLocation *location = createResourceLocation("litlaunch", "litlaunch_library_api");
 
     LibraryImpl *result = createLibraryImpl(location,
                                             LITLAUNCH_LIBRARY_API_VERSION,
@@ -61,13 +61,21 @@ const char* getResourceLocationPath(ResourceLocation *ptr)
     return utstring_body(ptr->_path);
 }
 
-
-void freeResourceLocationNamespace(ResourceLocation *ptr)
+const char* resourceLocationToString(ResourceLocation *ptr)
 {
-    utstring_free(ptr->_namespace);
+    UT_string* combination;
+    utstring_new(combination);
+    utstring_printf(combination, "%s:%s", getResourceLocationNamespace(ptr), getResourceLocationPath(ptr));
+    const char* body = utstring_body(combination);
+    const char* result = malloc(sizeof(*body));
+    strcpy(result, body);
+    utstring_free(combination); // Make sure to free the temp string.
+    return result;
 }
 
-void freeResourceLocationPath(ResourceLocation *ptr)
+void freeResourceLocation(ResourceLocation *ptr)
 {
+    utstring_free(ptr->_namespace);
     utstring_free(ptr->_path);
+    free(ptr);
 }

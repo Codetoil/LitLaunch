@@ -2,10 +2,19 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "C Launch",
+      "name": "C Launch Linux x64",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/litlaunch-library-api/test/build/exes/main/test",
+      "program": "${workspaceFolder}/litlaunch-library-api/test/build/exes/main/linuxX86-64/test",
+      "args": [],
+      "environment": [{ "name": "config", "value": "Debug" }],
+      "cwd": "${workspaceFolder}/run"
+    },
+    {
+      "name": "C Launch Windows x64",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/litlaunch-library-api/test/build/exes/main/windowsX86-64/test",
       "args": [],
       "environment": [{ "name": "config", "value": "Debug" }],
       "cwd": "${workspaceFolder}/run"
