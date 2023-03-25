@@ -4,8 +4,12 @@ pluginManagement {
         google()
         mavenCentral()
         maven {
-            name "Nokee Repository"
+            name "Nokee Release Repository"
             url "https://repo.nokee.dev/release"
+        }
+        maven {
+            name "Nokee Snapshot Repository"
+            url "https://repo.nokee.dev/snapshot"
         }
         maven {
             name "Gradle Plugins"
@@ -40,11 +44,11 @@ pluginManagement {
     resolutionStrategy {
         eachPlugin {
             if (requested.id.id.startsWith("dev.nokee.")) {
-                useModule("${requested.id.id}:${requested.id.id}.gradle.plugin:0.4.0")
+                useModule("${requested.id.id}:${requested.id.id}.gradle.plugin:0.4.+")
             }
         }
     }
 }
 
-include ":litlaunch-library-api:shared-library", ":litlaunch-library-api:test"/*,":litlaunch-config",":litlaunch-event",
+include ":litlaunch-library-api", ":litlaunch-library-api:library", ":litlaunch-library-api:test"/*,":litlaunch-config",":litlaunch-event",
         ":litlaunch-logger", ":litlaunch-java-dependency-loader"*/

@@ -23,33 +23,29 @@ class ProjectChecker {
 
     Project lookForProjectGivenPrefix(Object thisProject, String prefix)
     {
-        Project projectObject;
-        if (projectObject == null) {
-            projectObject = thisProject.findProject(prefix.concat(projectName))
-            System.out.println("" + numChecks++ + ". ".concat(projectObject.toString()))
-            if (projectObject == null) {
-                projectObject = thisProject.findProject(":".concat(prefix.concat(projectName)))
-                System.out.println("" + numChecks++ + ". ".concat(projectObject.toString()))
-                if (projectObject == null) {
-                    projectObject = thisProject.findProject("..:".concat(prefix.concat(projectName)))
-                    System.out.println("" + numChecks++ + ". ".concat(projectObject.toString()))
-                    if (projectObject == null) {
-                        projectObject = thisProject.findProject(":..:".concat(prefix.concat(projectName)))
-                        System.out.println("" + numChecks++ + ". ".concat(projectObject.toString()))
-                    }
-                }
-            }
-        }
+        Project projectObject = thisProject.findProject(prefix.concat(projectName))
+        System.out.println("" + numChecks++ + ". " + prefix.concat(projectName) + " : " + projectObject.toString())
         return projectObject;
     }
 
     Project lookForProject(Object thisProject)
     {
         Project projectObject;
-        projectObject = this.lookForProjectGivenPrefix(thisProject, "")
-        if (projectObject == null) {
-            projectObject = this.lookForProjectGivenPrefix(thisProject, "LitLaunch:")
-        }
+        projectObject = lookForProjectGivenPrefix(thisProject, "");
+        if (projectObject != null) return projectObject;
+        projectObject = lookForProjectGivenPrefix(thisProject, ":");
+        if (projectObject != null) return projectObject;
+        projectObject = lookForProjectGivenPrefix(thisProject, "..:");
+        if (projectObject != null) return projectObject;
+        projectObject = lookForProjectGivenPrefix(thisProject, ":..:");
+        if (projectObject != null) return projectObject;
+        projectObject = lookForProjectGivenPrefix(thisProject, "..:..:");
+        if (projectObject != null) return projectObject;
+        projectObject = lookForProjectGivenPrefix(thisProject, ":..:..:");
+        if (projectObject != null) return projectObject;
+        projectObject = lookForProjectGivenPrefix(thisProject, "..:..:..:");
+        if (projectObject != null) return projectObject;
+        projectObject = lookForProjectGivenPrefix(thisProject, ":..:..:..:");
         return projectObject;
     }
 }
