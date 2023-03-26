@@ -9,7 +9,7 @@ typedef struct FeatureStruct
     LibraryTemplate *parentLibrary;
 } Feature;
 
-struct FeatureRegistryStruct
+typedef struct FeatureRegistryStruct
 {
     ResourceLocation *id;
     Feature *feature;

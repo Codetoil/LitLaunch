@@ -13,7 +13,6 @@ application {
         machines.windows.x86, machines.windows.x86_64
     ]
     dependencies {
-        implementation files('lib/litlaunch-library-api-0.1.0+build.4-win-x64.lib')
-        //implementation files('lib/liblitlaunch-library-api-0.1.0+build.4-linux-x64.a')
+        implementation toProject(this, "litlaunch-library-api:library")
     }
 }

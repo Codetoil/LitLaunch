@@ -1,12 +1,19 @@
 #include <stdlib.h>
-#include "litlaunch-library-api.h"
-#include "library.h"
-#include "dependencies.h"
+#include "litlaunch/litlaunch-library-api.h"
+#include "litlaunch/library.h"
+#include "litlaunch/dependencies.h"
 
 LibraryImpl *initLibraryApi(void)
 {
     LibraryTemplate *litlaunchLibraryApiTemplate = NULL; //createLibraryTemplate();
-    ResourceLocation *location = createResourceLocation("litlaunch", "litlaunch_library_api");
+
+    ResourceLocation *location = newResourceLocation();
+#ifndef _LITLAUNCH_SLIM_
+    setResourceLocation(location, "litlaunch", "litlaunch_library_api");
+#else
+    location->_namespace = 0x0001; // 0x0001 is the litlaunch namespace
+    location->_path = 0x0000; // 0x00010000 is the resource location of the litlaunch library api
+#endif
 
     LibraryImpl *result = createLibraryImpl(location,
                                             LITLAUNCH_LIBRARY_API_VERSION,
@@ -19,7 +26,7 @@ LibraryImpl *createLibraryImpl(ResourceLocation *id, const char* version, Librar
     LibraryImpl* impl = malloc(sizeof(*impl));
     impl->implementationId = id;
     utstring_new(impl->implementationVersion);
-    utstring_printf(impl->implementationVersion, version);
+    utstring_printf(impl->implementationVersion, "%s", version);
     impl->libraryTemplate = _template;
 
     return impl;
@@ -40,22 +47,30 @@ void freeLibraryImplVersion(LibraryImpl *ptr)
     utstring_free(ptr->implementationVersion);
 }
 
-ResourceLocation *createResourceLocation(ResourceLocationNamespace _namespace, ResourceLocationPath _path)
+ResourceLocation *newResourceLocation()
 {
-    ResourceLocation* loc = malloc(sizeof(*loc));
-#ifndef _LITLAUNCH_SLIM_
-    utstring_new(loc->_namespace);
-    utstring_new(loc->_path);
-    utstring_printf(loc->_namespace, _namespace);
-    utstring_printf(loc->_path, _path);
-#endif
-    return loc;
+    return (ResourceLocation*) malloc(sizeof(ResourceLocation));
+}
+
+void setResourceLocation(ResourceLocation* ptr, const char* _namespace, const char* _path)
+{
+    utstring_new(ptr->_namespace);
+    utstring_new(ptr->_path);
+    utstring_printf(ptr->_namespace, "%s", _namespace);
+    utstring_printf(ptr->_path, "%s", _path);
 }
 
 const char* getResourceLocationNamespace(ResourceLocation *ptr)
 {
 #ifndef _LITLAUNCH_SLIM_
     return utstring_body(ptr->_namespace);
+#endif
+}
+
+size_t getResourceLocationNamespaceLength(ResourceLocation *ptr)
+{
+#ifndef _LITLAUNCH_SLIM_
+    return utstring_len(ptr->_namespace);
 #endif
 }
 
@@ -66,18 +81,23 @@ const char* getResourceLocationPath(ResourceLocation *ptr)
 #endif
 }
 
-const char* resourceLocationToString(ResourceLocation *ptr)
+size_t getResourceLocationPathLength(ResourceLocation *ptr)
 {
 #ifndef _LITLAUNCH_SLIM_
-    UT_string* combination;
-    utstring_new(combination);
-    utstring_printf(combination, "%s:%s", getResourceLocationNamespace(ptr), getResourceLocationPath(ptr));
-    const char* body = utstring_body(combination);
-    const char* result = malloc(sizeof(*body));
-    strcpy(result, body);
-    utstring_free(combination); // Make sure to free the temp string.
-    return result;
+    return utstring_len(ptr->_path);
 #endif
+}
+
+const char* resourceLocationToString(ResourceLocation *ptr)
+{
+    const char* _namespace = getResourceLocationNamespace(ptr);
+    const char* _path = getResourceLocationPath(ptr);
+    char* result = malloc(getResourceLocationNamespaceLength(ptr) 
+        + sizeof(char) + getResourceLocationPathLength(ptr));
+    strcpy(result, _namespace);
+    strcat(result, ":");
+    strcat(result, _path);
+    return result;
 }
 
 void freeResourceLocation(ResourceLocation *ptr)

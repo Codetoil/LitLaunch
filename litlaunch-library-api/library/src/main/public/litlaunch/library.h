@@ -10,6 +10,8 @@ typedef struct LibraryTemplateStruct
     DependencyRegistry *dependencyDict;
 } LibraryTemplate;
 
+typedef struct FeatureRegistryStruct FeatureRegistry;
+
 typedef struct LibraryImplStruct
 {
     ResourceLocation *implementationId;
@@ -19,3 +21,6 @@ typedef struct LibraryImplStruct
 } LibraryImpl;
 
 extern LibraryImpl *createLibraryImpl(ResourceLocation *id, const char* version, LibraryTemplate *_template);
+extern const char* getLibraryImplVersion(LibraryImpl* ptr);
+extern ResourceLocation *getLibraryImplResourceLocation(LibraryImpl *ptr);
+extern void freeLibraryImplVersion(LibraryImpl *ptr);
