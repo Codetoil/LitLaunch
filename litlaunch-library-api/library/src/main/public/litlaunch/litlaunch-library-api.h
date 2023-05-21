@@ -7,8 +7,7 @@
 // 0x0001: 0.1.4+build.4
 // 0x0002: 0.2.0
 // 0x0003: 0.2.1
-#define LITLAUNCH_LIBRARY_API_VERSION "0x0003"
-// For now keep it a string.
+#define LITLAUNCH_LIBRARY_API_VERSION 0x0003
 #endif
 
 #include "dependencies.h"
