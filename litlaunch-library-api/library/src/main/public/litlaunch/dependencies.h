@@ -5,47 +5,41 @@
 
 typedef enum EnumDependencyRequirement
 {
-    INCOMPATIBLE = -1,
     COMPATIBLE = 0,
-    REQUIRED = 1
+    REQUIRED = 1,
+    EMBEDDED = 2
 } DependencyRequirement;
-
-typedef enum EnumVersionComparisonResult
-{
-    OLDER = -1,
-    SAME = 0,
-    NEWER = 1
-} VersionComparisonResult;
 
 typedef struct VersionComparisonFunctionRegistryStruct VersionComparisonFunctionRegistry;
 
 typedef struct VersionStruct
 {
     ResourceLocation *id;
-    VersionComparisonFunctionRegistry *versionValidFunc;
 #ifndef _LITLAUNCH_SLIM_
     const char* version;
 #else
-    const char version;
+    char version;
 #endif
 } Version;
 
-typedef struct DependencyStruct
+typedef struct DependencyDictStruct DependencyDict;
+
+typedef struct ModuleStruct
 {
     ResourceLocation *id;
+    Version *version;
+    DependencyDict *dependencyDict;
+    UT_hash_handle hh;
+} Module;
+
+typedef struct DependencyDictStruct
+{
+    ResourceLocation *id;
+    Module *dependency;
+    Version *versionRequired;
     DependencyRequirement *dependencyRequirement;
-} Dependency;
-
-typedef struct DependencyRegistryStruct
-{
-    ResourceLocation *id;
-    Dependency *dependency;
     UT_hash_handle hh;
-} DependencyRegistry;
+} DependencyDict;
 
-typedef struct VersionComparisonFunctionRegistryStruct
-{
-    ResourceLocation *id;
-    VersionComparisonResult (*_func)(Version* requiredVersion, Version* inputVersion);
-    UT_hash_handle hh;
-} VersionComparisonFunctionRegistry;
+extern Module *newModule(ResourceLocation* id, Version* version, DependencyDict* dependencyDict);
+extern void freeModule(Module* ptr);

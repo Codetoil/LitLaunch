@@ -16,9 +16,8 @@ typedef struct ResourceLocationStruct
     ResourceLocationPath _path;
 } ResourceLocation;
 
-extern ResourceLocation *newResourceLocation();
 #ifndef _LITLAUNCH_SLIM_
-extern void setResourceLocation(ResourceLocation* ptr, const char* _namespace, const char* _path);
+extern ResourceLocation *newResourceLocation(const char* _namespace, const char* _path);
 #endif
 
 extern const char* getResourceLocationNamespace(ResourceLocation *ptr);
