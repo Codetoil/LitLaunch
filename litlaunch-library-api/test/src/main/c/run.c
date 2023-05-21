@@ -4,9 +4,9 @@
 
 int main()
 {
-    printf("COMPATIBLE: %i\n", COMPATIBLE);
-    printf("REQUIRED: %i\n", REQUIRED);
-    printf("EMBEDDED: %i\n", EMBEDDED);
+    printf("COMPATIBLE_DEP: %i\n", COMPATIBLE_DEP);
+    printf("REQUIRED_DEP: %i\n", REQUIRED_DEP);
+    printf("EMBEDDED_DEP: %i\n", EMBEDDED_DEP);
 
     Module* apiModule = initLibraryApi();
     

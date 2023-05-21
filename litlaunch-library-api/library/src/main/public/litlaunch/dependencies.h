@@ -5,9 +5,9 @@
 
 typedef enum EnumDependencyRequirement
 {
-    COMPATIBLE = 0,
-    REQUIRED = 1,
-    EMBEDDED = 2
+    COMPATIBLE_DEP = 0,
+    REQUIRED_DEP = 1,
+    EMBEDDED_DEP = 2
 } DependencyRequirement;
 
 typedef struct VersionComparisonFunctionRegistryStruct VersionComparisonFunctionRegistry;
