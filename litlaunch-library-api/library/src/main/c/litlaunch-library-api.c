@@ -33,6 +33,18 @@ void freeModule(Module* ptr)
     free(ptr);
 }
 
+
+
+void freeResourceLocation(ResourceLocation *ptr)
+{
+#ifndef _LITLAUNCH_SLIM_
+    utstring_free(ptr->_namespace);
+    utstring_free(ptr->_path);
+#endif
+    free(ptr);
+}
+
+#ifndef _LITLAUNCH_SLIM_
 ResourceLocation *newResourceLocation(const char* _namespace, const char* _path)
 {
     ResourceLocation* ptr = (ResourceLocation*) malloc(sizeof(*ptr));
@@ -44,41 +56,24 @@ ResourceLocation *newResourceLocation(const char* _namespace, const char* _path)
     return ptr;
 }
 
-void freeResourceLocation(ResourceLocation *ptr)
-{
-#ifndef _LITLAUNCH_SLIM_
-    utstring_free(ptr->_namespace);
-    utstring_free(ptr->_path);
-#endif
-    free(ptr);
-}
-
 const char* getResourceLocationNamespace(ResourceLocation *ptr)
 {
-#ifndef _LITLAUNCH_SLIM_
     return utstring_body(ptr->_namespace);
-#endif
 }
 
 size_t getResourceLocationNamespaceLength(ResourceLocation *ptr)
 {
-#ifndef _LITLAUNCH_SLIM_
     return utstring_len(ptr->_namespace);
-#endif
 }
 
 const char* getResourceLocationPath(ResourceLocation *ptr)
 {
-#ifndef _LITLAUNCH_SLIM_
     return utstring_body(ptr->_path);
-#endif
 }
 
 size_t getResourceLocationPathLength(ResourceLocation *ptr)
 {
-#ifndef _LITLAUNCH_SLIM_
     return utstring_len(ptr->_path);
-#endif
 }
 
 const char* resourceLocationToString(ResourceLocation *ptr)
@@ -92,3 +87,23 @@ const char* resourceLocationToString(ResourceLocation *ptr)
     strcat(result, _path);
     return result;
 }
+#else
+ResourceLocation *newResourceLocation(char _namespace, char _path)
+{
+    ResourceLocation* ptr = (ResourceLocation*) malloc(sizeof(*ptr));
+
+    ptr->_namespace = _namespace;
+    ptr->_path = _path;
+    return ptr;
+}
+
+char getResourceLocationNamespace(ResourceLocation *ptr)
+{
+    return ptr->_namespace;
+}
+
+char getResourceLocationPath(ResourceLocation *ptr)
+{
+    return ptr->_path;
+}
+#endif

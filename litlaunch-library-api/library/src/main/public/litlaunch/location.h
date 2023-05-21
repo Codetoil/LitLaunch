@@ -18,7 +18,6 @@ typedef struct ResourceLocationStruct
 
 #ifndef _LITLAUNCH_SLIM_
 extern ResourceLocation *newResourceLocation(const char* _namespace, const char* _path);
-#endif
 
 extern const char* getResourceLocationNamespace(ResourceLocation *ptr);
 extern size_t getResourceLocationNamespaceLength(ResourceLocation *ptr);
@@ -27,4 +26,11 @@ extern const char* getResourceLocationPath(ResourceLocation *ptr);
 extern size_t getResourceLocationPathLength(ResourceLocation *ptr);
 
 extern const char* resourceLocationToString(ResourceLocation *ptr);
+#else
+extern ResourceLocation *newResourceLocation(char _namespace, char _path);
+
+extern char getResourceLocationNamespace(ResourceLocation *ptr);
+
+extern char getResourceLocationPath(ResourceLocation *ptr);
+#endif
 extern void freeResourceLocation(ResourceLocation *ptr);
