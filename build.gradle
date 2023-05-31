@@ -8,8 +8,6 @@ plugins {
     id 'dev.nokee.c-library' apply false
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 
 class ProjectChecker {
@@ -92,7 +90,7 @@ subprojects.forEach((Project localProject) -> {
                         artifactId = ""
                         licenses {
                             license {
-                                name = 'GNU Lesser General Public License v3.0 only'
+                                name = 'GNU Lesser General Public License v3.0 or later'
                                 url = 'https://www.gnu.org/licenses/lgpl-3.0-standalone.html'
                             }
                         }

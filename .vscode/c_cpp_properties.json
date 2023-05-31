@@ -6,8 +6,8 @@
                 "${workspaceFolder}/**",
                 "${JAVA_HOME}/include",
                 "${JAVA_HOME}/include/linux",
-                "${workspaceFolder}/litlaunch-library-api/src/main/headers",
-                "${workspaceFolder}/litlaunch-library-api/src/main/public"
+                "${workspaceFolder}/litlaunch-library-api/library/src/main/headers",
+                "${workspaceFolder}/litlaunch-library-api/library/src/main/public"
             ],
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "c99",
@@ -21,7 +21,9 @@
         {
             "name": "windows-gcc-x64",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/litlaunch-library-api/library/src/main/headers",
+                "${workspaceFolder}/litlaunch-library-api/library/src/main/public"
             ],
             "defines": [
                 "_DEBUG",
