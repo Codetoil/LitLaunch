@@ -22,6 +22,11 @@ jobs:
         os: [ubuntu-22.04, windows-2022]
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Set up MinGW
+        if: ${{ runner.os == 'Windows' }}
+        uses: egor-tensin/setup-mingw@v2
+        with:
+          platform: x64
       - name: checkout repository
         uses: actions/checkout@v3
       - name: validate gradle wrapper
@@ -37,7 +42,7 @@ jobs:
       - name: build
         run: ./gradlew build
       - name: capture build artifacts on Linux
-        if: ${{ runner.os == 'Linux' && matrix.java == '17' && matrix.dist == 'temurin' }} # Only upload artifacts built from LTS java on one Linux
+        if: ${{ runner.os == 'Linux' && matrix.java == '17' && matrix.dist == 'temurin' }} # Only upload Linux artifacts built from LTS java on one Linux
         uses: actions/upload-artifact@v3
         with:
           name: Artifacts
@@ -45,7 +50,7 @@ jobs:
             litlaunch-library-api/build/lib/*/lib*.so
             litlaunch-library-api/test/build/exe/*/*
       - name: capture build artifacts on Windows
-        if: ${{ runner.os == 'Windows' && matrix.java == '17' && matrix.dist == 'temurin' }} # Only upload artifacts built from LTS java on one Linux
+        if: ${{ runner.os == 'Windows' && matrix.java == '17' && matrix.dist == 'temurin' }} # Only upload Windows artifacts built from LTS java on one Windows
         uses: actions/upload-artifact@v3
         with:
           name: Artifacts
