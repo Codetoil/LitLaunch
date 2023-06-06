@@ -11,21 +11,25 @@ int main()
     printf("OK_VER: %i\n", OK_VER);
     printf("TOO_NEW: %i\n", TOO_NEW);
 
-    ModuleImpl* libApiImpl = initLibraryApi();
-    ResourceLocation* libApiImplLoc = getModuleImplResourceLocation(libApiImpl);
-    const char* libApiImplVersion = getModuleImplVersion(libApiImpl);
-    const char* libApiImplNamespace = getResourceLocationNamespace(libApiImpl);
-    const char* libApiImplPath = getResourceLocationPath(libApiImpl);
+    ModuleImpl* libApiModuleImpl = initLibraryApi();
+    printf("1\n");
+    ResourceLocation* libApiModuleImplLoc = getModuleImplResourceLocation(libApiModuleImpl);
+    printf("2\n");
+    const char* libApiModuleImplVersion = getModuleImplVersion(libApiModuleImpl);
+    printf("3\n");
+    const char* libApiModuleImplNamespace = getResourceLocationNamespace(libApiModuleImpl);
+    printf("4\n");
+    const char* libApiModuleImplPath = getResourceLocationPath(libApiModuleImpl);
 
     printf("LitLaunch Library API Module Implementation: \n");
-    printf("\t", libApiImplNamespace, ":", libApiImplPath, "\n");
-    printf("\t", libApiImplVersion, "\n");
+    printf("\t", libApiModuleImplNamespace, ":", libApiModuleImplPath, "\n");
+    printf("\t", libApiModuleImplVersion, "\n");
 
-    freeModuleImplVersion(libApiImpl);
-    freeResourceLocationNamespace(libApiImplLoc);
-    freeResourceLocationPath(libApiImplLoc);
-    free(libApiImplLoc);
-    free(libApiImpl);
+    freeModuleImplVersion(libApiModuleImpl);
+    freeResourceLocationNamespace(libApiModuleImplLoc);
+    freeResourceLocationPath(libApiModuleImplLoc);
+    free(libApiModuleImplLoc);
+    free(libApiModuleImpl);
     
     return 0;
 }
