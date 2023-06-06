@@ -14,6 +14,6 @@ application {
         machines.windows.x86, machines.windows.x86_64
     ]
     dependencies {
-        runtimeOnly toProject(this, "litlaunch-library-api:library")
+        implementation toProject(this, "litlaunch-library-api:library")
     }
 }

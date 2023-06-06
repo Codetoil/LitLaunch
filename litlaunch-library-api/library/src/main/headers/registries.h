@@ -1,14 +1,8 @@
 #pragma once
 
-#include "litlaunch-library-api.h"
 #include "uthash/uthash.h"
-#include "uthash/utstring.h"
-
-struct ResourceLocationStruct
-{
-    UT_string *_namespace;
-    UT_string *_path;
-};
+#include "litlaunch-library-api.h"
+#include "location.h"
 
 struct VersionValidFuncRegistryStruct
 {
@@ -17,17 +11,17 @@ struct VersionValidFuncRegistryStruct
     UT_hash_handle hh;
 };
 
-struct ComponentTemplateRegistryStruct
+struct ModuleTemplateRegistryStruct
 {
     ResourceLocation *id;
-    ComponentTemplate *componentTemplate;
+    ModuleTemplate *moduleTemplate;
     UT_hash_handle hh;
 };
 
-struct ComponentImplRegistryStruct
+struct ModuleImplRegistryStruct
 {
     ResourceLocation *id;
-    ComponentImpl *component;
+    ModuleImpl *module;
     UT_hash_handle hh;
 };
 

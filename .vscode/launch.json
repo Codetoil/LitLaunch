@@ -5,10 +5,23 @@
       "name": "C Launch",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/litlaunch-library-api/test/build/exes/main/test",
+      "program": "echo unsupported system",
       "args": [],
       "environment": [{ "name": "config", "value": "Debug" }],
-      "cwd": "${workspaceFolder}/run"
+      "cwd": "${workspaceFolder}/run",
+      "linux": {
+        "name": "C Launch Linux",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/litlaunch-library-api/test/build/exes/main/linuxX86-64/test",
+        "environment": [{ "name": "LD_LIBRARY_PATH", "value": "${workspaceFolder}/litlaunch-library-api/library/build/libs/main/linuxX86-64" }]
+      },
+      "windows": {
+        "name": "C Launch Windows",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/litlaunch-library-api/test/build/exes/main/windowsX86-64/test.exe",
+      }
     }
   ]
 }

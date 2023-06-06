@@ -11,20 +11,21 @@ int main()
     printf("OK_VER: %i\n", OK_VER);
     printf("TOO_NEW: %i\n", TOO_NEW);
 
-    LibraryImpl* libApiImpl = initLibraryApi();
-    ResourceLocation* libApiImplLoc = getLibraryImplResourceLocation(libApiImpl);
-    const char* libApiImplVersion = getLibraryImplVersion(libApiImpl);
+    ModuleImpl* libApiImpl = initLibraryApi();
+    ResourceLocation* libApiImplLoc = getModuleImplResourceLocation(libApiImpl);
+    const char* libApiImplVersion = getModuleImplVersion(libApiImpl);
     const char* libApiImplNamespace = getResourceLocationNamespace(libApiImpl);
     const char* libApiImplPath = getResourceLocationPath(libApiImpl);
 
-    printf("LitLaunch Library API Implementation: \n");
+    printf("LitLaunch Library API Module Implementation: \n");
     printf("\t", libApiImplNamespace, ":", libApiImplPath, "\n");
     printf("\t", libApiImplVersion, "\n");
 
-    freeLibraryImplVersion(libApiImpl);
+    freeModuleImplVersion(libApiImpl);
     freeResourceLocationNamespace(libApiImplLoc);
     freeResourceLocationPath(libApiImplLoc);
     free(libApiImplLoc);
     free(libApiImpl);
+    
     return 0;
 }

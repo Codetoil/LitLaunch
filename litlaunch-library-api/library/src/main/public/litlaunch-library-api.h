@@ -19,27 +19,25 @@ typedef struct VersionStruct Version;
 
 typedef struct ResourceLocationStruct ResourceLocation;
 
-typedef struct ComponentImplRegistryStruct ComponentImplRegistry;
-typedef struct ComponentTemplateRegistryStruct ComponentTemplateRegistry;
+typedef struct ModuleImplRegistryStruct ModuleImplRegistry;
+typedef struct ModuleTemplateRegistryStruct ModuleTemplateRegistry;
 typedef struct DependencyRegistryStruct DependencyRegistry;
 
 typedef struct DependencyStruct Dependency;
 
-typedef struct ComponentTemplateStruct ComponentTemplate;
-typedef struct LibraryTemplateStruct LibraryTemplate;
+typedef struct ModuleTemplateStruct ModuleTemplate;
 
-typedef struct ComponentImplStruct ComponentImpl;
-typedef struct LibraryImplStruct LibraryImpl;
+typedef struct ModuleImplStruct ModuleImpl;
 
 #define LITLAUNCH_LIBRARY_API_NAME "LitLaunch Library API"
 #define LITLAUNCH_LIBRARY_API_VERSION "0.1.0+build.3"
 
-extern LibraryImpl *initLibraryApi(void);
+extern ModuleImpl *initLibraryApi(void);
 
-extern LibraryImpl *createLibraryImpl(ResourceLocation *id, const char version[], LibraryTemplate *_template);
-extern const char* getLibraryImplVersion(LibraryImpl* ptr);
-extern ResourceLocation *getLibraryImplResourceLocation(LibraryImpl *ptr);
-extern void freeLibraryImplVersion(LibraryImpl *ptr);
+extern ModuleImpl *createModuleImpl(ResourceLocation *id, const char version[], ModuleTemplate *_template);
+extern const char* getModuleImplVersion(ModuleImpl* ptr);
+extern ResourceLocation *getModuleImplResourceLocation(ModuleImpl *ptr);
+extern void freeModuleImplVersion(ModuleImpl *ptr);
 
 extern ResourceLocation *createResourceLocation(const char _namespace[], const char _path[]);
 extern const char* getResourceLocationNamespace(ResourceLocation *ptr);

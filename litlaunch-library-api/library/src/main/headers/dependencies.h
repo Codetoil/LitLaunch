@@ -1,7 +1,7 @@
 #pragma once
 
-#include "litlaunch-library-api.h"
 #include "uthash/utstring.h"
+#include "litlaunch-library-api.h"
 
 struct VersionStruct
 {

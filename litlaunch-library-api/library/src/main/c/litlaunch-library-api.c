@@ -1,41 +1,42 @@
 #include "litlaunch-library-api.h"
 #include <stdlib.h>
-#include "libraries.h"
+#include "location.h"
+#include "modules.h"
 #include "dependencies.h"
 
-LibraryImpl *initLibraryApi(void)
+ModuleImpl *initLibraryApi(void)
 {
-    LibraryTemplate *litlaunchLibraryApiTemplate = NULL; //createLibraryTemplate();
+    ModuleTemplate *litlaunchLibraryApiModuleTemplate = NULL; //createLibraryTemplate();
     ResourceLocation *location = createResourceLocation("litlaunch", LITLAUNCH_LIBRARY_API_NAME);
 
-    LibraryImpl *result = createLibraryImpl(location,
+    ModuleImpl *result = createModuleImpl(location,
                                             LITLAUNCH_LIBRARY_API_VERSION,
-                                            litlaunchLibraryApiTemplate);
+                                            litlaunchLibraryApiModuleTemplate);
     return result;
 }
 
-LibraryImpl *createLibraryImpl(ResourceLocation *id, const char version[], LibraryTemplate *_template)
+ModuleImpl *createModuleImpl(ResourceLocation *id, const char version[], ModuleTemplate *_template)
 {
-    LibraryImpl* impl = malloc(sizeof(*impl));
+    ModuleImpl* impl = malloc(sizeof(*impl));
     impl->implementationId = id;
     utstring_new(impl->implementationVersion);
     utstring_printf(impl->implementationVersion, version);
-    impl->libraryTemplate = _template;
+    impl->implementationTemplate = _template;
 
     return impl;
 }
 
-const char* getLibraryImplVersion(LibraryImpl* ptr)
+const char* getModuleImplVersion(ModuleImpl* ptr)
 {
     return utstring_body(ptr->implementationVersion);
 }
 
-ResourceLocation *getLibraryImplResourceLocation(LibraryImpl *ptr)
+ResourceLocation *getModuleImplResourceLocation(ModuleImpl *ptr)
 {
     return ptr->implementationId;
 }
 
-void freeLibraryImplVersion(LibraryImpl *ptr)
+void freeModuleImplVersion(ModuleImpl *ptr)
 {
     utstring_free(ptr->implementationVersion);
 }
