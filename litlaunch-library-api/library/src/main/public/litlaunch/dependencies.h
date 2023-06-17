@@ -11,7 +11,23 @@ typedef enum EnumDependencyRequirement
     EMBEDDED_DEP = 2
 } DependencyRequirement;
 
-typedef struct VersionComparisonFunctionRegistryStruct VersionComparisonFunctionRegistry;
+typedef enum EnumVersionComparatorResult
+{
+    TOO_OLD = -1,
+    JUST_RIGHT = 0,
+    TOO_NEW = 1
+} VersionComparatorResult;
+
+typedef struct VersionStruct Version;
+
+typedef VersionComparatorResult (*VersionComparator)(const struct Version*);
+
+typedef struct VersionSchemaStruct
+{
+    ResourceLocation *id;
+    VersionComparator* withinBounds;
+    UT_hash_handle hh;
+} VersionSchema;
 
 typedef struct VersionStruct
 {
@@ -53,3 +69,6 @@ extern size_t getVersionLength(Version *ptr);
 extern Version *newVersion(ResourceLocation* id, char version);
 #endif
 extern void freeVersion(Version* ptr);
+
+extern VersionSchema *newVersionSchema(ResourceLocation* id, VersionComparator* withinBounds);
+extern void freeVersionSchema(VersionSchema* ptr);
