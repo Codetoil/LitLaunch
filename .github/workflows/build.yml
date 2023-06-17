@@ -16,12 +16,15 @@ jobs:
         ]
         # Use these Java versions
         java: [
-          8, 11, 17, 19
+          8, 11, 17, 20
         ]
-        # and run on only Linux
-        os: [ubuntu-22.04]
+        # and run on Linux and Windows
+        os: [ubuntu-22.04, windows-2022]
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Path
+        if: ${{ runner.os == 'Windows' }}
+        run: echo $PATH
       - name: checkout repository
         uses: actions/checkout@v3
       - name: validate gradle wrapper
@@ -36,11 +39,22 @@ jobs:
         run: chmod +x ./gradlew
       - name: build
         run: ./gradlew build
-      - name: capture build artifacts
-        if: ${{ runner.os == 'Linux' && matrix.java == '17' && matrix.dist == 'temurin' }} # Only upload artifacts built from LTS java on one OS
+      - name: capture build artifacts on Linux
+        if: ${{ runner.os == 'Linux' && matrix.java == '17' && matrix.dist == 'temurin' }} # Only upload Linux artifacts built from LTS java on one Linux
         uses: actions/upload-artifact@v3
         with:
           name: Artifacts
           path: |
-            litlaunch-library-api/build/lib/*/lib*.so
+            litlaunch-library-api/library/build/lib/*/lib*.so
+            litlaunch-library-api/library/build/lib/*/lib*.a
             litlaunch-library-api/test/build/exe/*/*
+      - name: capture build artifacts on Windows
+        if: ${{ runner.os == 'Windows' && matrix.java == '17' && matrix.dist == 'temurin' }} # Only upload Windows artifacts built from LTS java on one Windows
+        uses: actions/upload-artifact@v3
+        with:
+          name: Artifacts
+          path: |
+            litlaunch-library-api/library/build/lib/*/*.dll
+            litlaunch-library-api/library/build/lib/*/*.lib
+            litlaunch-library-api/test/build/exe/*/*.exe
+            

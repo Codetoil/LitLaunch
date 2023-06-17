@@ -1,6 +1,6 @@
 #include <stdlib.h>
-
 #include "litlaunch/litlaunch-library-api.h"
+#include "litlaunch/location.h"
 #include "litlaunch/dependencies.h"
 
 Module *moduleRegistry = NULL;

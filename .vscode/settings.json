@@ -15,6 +15,7 @@
     "litlaunch-internal.h": "c",
     "utarray.h": "c",
     "libraries.h": "c",
+    "dlfcn.h": "c",
     "library.h": "c",
     "dependencies.h": "c",
     "location.h": "c"

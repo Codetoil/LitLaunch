@@ -6,8 +6,6 @@ plugins {
 
 library {
     targetMachines = [
-        machines.linux.x86_64,
-        machines.windows.x86, machines.windows.x86_64
+        machines.linux.x86_64
     ]
-    targetLinkages = [linkages.static]
 }

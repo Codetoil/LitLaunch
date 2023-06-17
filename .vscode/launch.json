@@ -2,22 +2,26 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "C Launch Linux x64",
+      "name": "Test LitLaunch Library API",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/litlaunch-library-api/test/build/exes/main/linuxX86-64/test",
+      "program": "echo unsupported system",
       "args": [],
       "environment": [{ "name": "config", "value": "Debug" }],
-      "cwd": "${workspaceFolder}/run"
-    },
-    {
-      "name": "C Launch Windows x64",
-      "type": "cppdbg",
-      "request": "launch",
-      "program": "${workspaceFolder}/litlaunch-library-api/test/build/exes/main/windowsX86-64/test",
-      "args": [],
-      "environment": [{ "name": "config", "value": "Debug" }],
-      "cwd": "${workspaceFolder}/run"
+      "cwd": "${workspaceFolder}/run",
+      "linux": {
+        "name": "Test LitLaunch Library API Linux",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/litlaunch-library-api/test/build/exes/main/linuxX86-64/test",
+        "environment": [{ "name": "LD_LIBRARY_PATH", "value": "${workspaceFolder}/litlaunch-library-api/library/build/libs/main/linuxX86-64" }]
+      },
+      "windows": {
+        "name": "Test LitLaunch Library API Windows",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/litlaunch-library-api/test/build/exes/main/windowsX86-64/test.exe",
+      }
     }
   ]
 }
