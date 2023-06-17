@@ -19,6 +19,8 @@ int main()
     printf("\tVersion:\n");
     printf("\t\tResource Location: %s\n", libApiModuleVersionLocStr);
     printf("\t\tValue: %s\n", libApiModuleVersionValue);
+    printf("\tDependencies:\n");
+    printf("\n");
     
     freeVersion(apiModule->version);
     free(libApiModuleVersionLocStr);
