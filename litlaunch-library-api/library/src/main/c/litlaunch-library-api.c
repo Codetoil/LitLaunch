@@ -1,4 +1,5 @@
 #include <stdlib.h>
+
 #include "litlaunch/litlaunch-library-api.h"
 #include "litlaunch/dependencies.h"
 
@@ -10,9 +11,7 @@ Module *initLibraryApi(void)
 #ifndef _LITLAUNCH_SLIM_
     location = newResourceLocation("litlaunch", "litlaunch_library_api");
 #else
-    location = (ResourceLocation*) malloc(sizeof(*location));
-    location->_namespace = 0x0001; // 0x0001 is the litlaunch namespace
-    location->_path = 0x0000; // 0x00010000 is the resource location of the litlaunch library api
+    location = newResourceLocation(0x0001, 0x0000); // 0x0001:0x0000 is the resource location of the litlaunch library api in slim mode
 #endif
     return newModule(location, NULL, NULL);
 }
