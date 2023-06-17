@@ -7,13 +7,21 @@ Module *moduleRegistry = NULL;
 
 Module *initLibraryApi(void)
 {
-    ResourceLocation *location;
+    ResourceLocation *versionLocation;
 #ifndef _LITLAUNCH_SLIM_
-    location = newResourceLocation("litlaunch", "litlaunch_library_api");
+    versionLocation = newResourceLocation("litlaunch", "litlaunch_library_api_version");
 #else
-    location = newResourceLocation(0x0001, 0x0000); // 0x0001:0x0000 is the resource location of the litlaunch library api in slim mode
+    versionLocation = newResourceLocation(0x0001, 0x0000); // 0x0001:0x0000 in this context is the resource location of the version of the litlaunch library api in slim mode
 #endif
-    return newModule(location, NULL, NULL);
+    Version *version = newVersion(versionLocation, LITLAUNCH_LIBRARY_API_VERSION);
+
+    ResourceLocation *moduleLocation;
+#ifndef _LITLAUNCH_SLIM_
+    moduleLocation = newResourceLocation("litlaunch", "litlaunch_library_api");
+#else
+    moduleLocation = newResourceLocation(0x0001, 0x0000); // 0x0001:0x0000 in this context is the resource location of the litlaunch library api in slim mode
+#endif
+    return newModule(moduleLocation, version, NULL);
 }
 
 #ifndef _LITLAUNCH_SLIM_
@@ -26,6 +34,26 @@ Version *newVersion(ResourceLocation* id, const char* version)
     return versionStruct;
 }
 
+const char* getVersionString(Version *ptr)
+{
+    return utstring_body(ptr->version);
+}
+
+size_t getVersionLength(Version *ptr)
+{
+    return utstring_len(ptr->version);
+}
+
+
+#else
+Version *newVersion(ResourceLocation* id, char version)
+{
+    Version* versionStruct = (Version*) malloc(sizeof(*versionStruct));
+    versionStruct->id = id;
+    versionStruct->version = version;
+}
+#endif
+
 void freeVersion(Version* ptr)
 {
     #ifndef _LITLAUNCH_SLIM_
@@ -34,19 +62,6 @@ void freeVersion(Version* ptr)
 
     free(ptr);
 }
-#else
-Version *newVersion(ResourceLocation* id, char version)
-{
-    Version* versionStruct = (Version*) malloc(sizeof(*versionStruct));
-    versionStruct->id = id;
-    versionStruct->version = version;
-}
-
-void freeVersion(Version* ptr)
-{
-    free(ptr);
-}
-#endif
 
 
 Module *newModule(ResourceLocation* id, Version* version, DependencyDict* dependencyDict)

@@ -10,12 +10,19 @@ int main()
 
     Module* apiModule = initLibraryApi();
     
-    const char* libApiImplLocStr = resourceLocationToString(apiModule->id);
+    const char* libApiModuleLocStr = resourceLocationToString(apiModule->id);
+    const char* libApiModuleVersionLocStr = resourceLocationToString(apiModule->version->id);
+    const char* libApiModuleVersionValue = getVersionString(apiModule->version);
 
     printf("LitLaunch Library API Implementation:\n");
-    printf("\tResource Location: %s\n", libApiImplLocStr);
+    printf("\tResource Location: %s\n", libApiModuleLocStr);
+    printf("\tVersion:\n");
+    printf("\t\tResource Location: %s\n", libApiModuleVersionLocStr);
+    printf("\t\tValue: %s\n", libApiModuleVersionValue);
     
-    free(libApiImplLocStr);
+    freeVersion(apiModule->version);
+    free(libApiModuleVersionLocStr);
+    free(libApiModuleLocStr);
     freeResourceLocation(apiModule->id);
     freeModule(apiModule);
     return 0;

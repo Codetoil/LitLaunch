@@ -47,6 +47,8 @@ extern void freeModule(Module* ptr);
 
 #ifndef _LITLAUNCH_SLIM
 extern Version *newVersion(ResourceLocation* id, const char* version);
+extern const char* getVersionString(Version *ptr);
+extern size_t getVersionLength(Version *ptr);
 #else
 extern Version *newVersion(ResourceLocation* id, char version);
 #endif
