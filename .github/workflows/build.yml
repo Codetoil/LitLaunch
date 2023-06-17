@@ -18,13 +18,10 @@ jobs:
         java: [
           8, 11, 17, 20
         ]
-        # and run on Linux and Windows
-        os: [ubuntu-22.04, windows-2022]
+        # and run on Linux
+        os: [ubuntu-22.04]
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Path
-        if: ${{ runner.os == 'Windows' }}
-        run: echo $PATH
       - name: checkout repository
         uses: actions/checkout@v3
       - name: validate gradle wrapper
@@ -35,7 +32,6 @@ jobs:
           distribution: ${{ matrix.dist }}
           java-version: ${{ matrix.java }}
       - name: make gradle wrapper executable
-        if: ${{ runner.os != 'Windows' }}
         run: chmod +x ./gradlew
       - name: build
         run: ./gradlew build
@@ -48,13 +44,4 @@ jobs:
             litlaunch-library-api/library/build/lib/*/lib*.so
             litlaunch-library-api/library/build/lib/*/lib*.a
             litlaunch-library-api/test/build/exe/*/*
-      - name: capture build artifacts on Windows
-        if: ${{ runner.os == 'Windows' && matrix.java == '17' && matrix.dist == 'temurin' }} # Only upload Windows artifacts built from LTS java on one Windows
-        uses: actions/upload-artifact@v3
-        with:
-          name: Artifacts
-          path: |
-            litlaunch-library-api/library/build/lib/*/*.dll
-            litlaunch-library-api/library/build/lib/*/*.lib
-            litlaunch-library-api/test/build/exe/*/*.exe
             
