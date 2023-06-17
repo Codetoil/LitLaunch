@@ -16,6 +16,39 @@ Module *initLibraryApi(void)
     return newModule(location, NULL, NULL);
 }
 
+#ifndef _LITLAUNCH_SLIM_
+Version *newVersion(ResourceLocation* id, const char* version)
+{
+    Version* versionStruct = (Version*) malloc(sizeof(*versionStruct));
+    versionStruct->id = id;
+    utstring_new(versionStruct->version);
+    utstring_printf(versionStruct->version, "%s", version);
+    return versionStruct;
+}
+
+void freeVersion(Version* ptr)
+{
+    #ifndef _LITLAUNCH_SLIM_
+        utstring_free(ptr->version);
+    #endif
+
+    free(ptr);
+}
+#else
+Version *newVersion(ResourceLocation* id, char version)
+{
+    Version* versionStruct = (Version*) malloc(sizeof(*versionStruct));
+    versionStruct->id = id;
+    versionStruct->version = version;
+}
+
+void freeVersion(Version* ptr)
+{
+    free(ptr);
+}
+#endif
+
+
 Module *newModule(ResourceLocation* id, Version* version, DependencyDict* dependencyDict)
 {
     Module* module = (Module*) malloc(sizeof(*module));
@@ -31,7 +64,6 @@ void freeModule(Module* ptr)
     HASH_DEL(moduleRegistry, ptr);
     free(ptr);
 }
-
 
 
 void freeResourceLocation(ResourceLocation *ptr)

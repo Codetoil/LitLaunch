@@ -1,6 +1,7 @@
 #pragma once
 
 #include "location.h"
+#include "uthash/utstring.h"
 #include "uthash/uthash.h"
 
 typedef enum EnumDependencyRequirement
@@ -16,7 +17,7 @@ typedef struct VersionStruct
 {
     ResourceLocation *id;
 #ifndef _LITLAUNCH_SLIM_
-    const char* version;
+    UT_string* version;
 #else
     char version;
 #endif
@@ -43,3 +44,10 @@ typedef struct DependencyDictStruct
 
 extern Module *newModule(ResourceLocation* id, Version* version, DependencyDict* dependencyDict);
 extern void freeModule(Module* ptr);
+
+#ifndef _LITLAUNCH_SLIM
+extern Version *newVersion(ResourceLocation* id, const char* version);
+#else
+extern Version *newVersion(ResourceLocation* id, char version);
+#endif
+extern void freeVersion(Version* ptr);
