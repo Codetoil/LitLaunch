@@ -9,8 +9,7 @@ String name1 = 'LitLaunch Library API Test'
 
 application {
     targetMachines = [
-        machines.linux.x86_64,
-        machines.windows.x86, machines.windows.x86_64
+        machines.linux.x86_64
     ]
     dependencies {
         implementation toProject(this, "litlaunch-library-api:library")
