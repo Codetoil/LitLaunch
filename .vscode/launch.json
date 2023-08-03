@@ -5,23 +5,13 @@
       "name": "Test LitLaunch Library API",
       "type": "cppdbg",
       "request": "launch",
-      "program": "echo unsupported system",
+      "program": "${workspaceFolder}/litlaunch-library-api/test/build/exes/main/test",
       "args": [],
-      "environment": [{ "name": "config", "value": "Debug" }],
-      "cwd": "${workspaceFolder}/run",
-      "linux": {
-        "name": "Test LitLaunch Library API Linux",
-        "type": "cppdbg",
-        "request": "launch",
-        "program": "${workspaceFolder}/litlaunch-library-api/test/build/exes/main/linuxX86-64/test",
-        "environment": [{ "name": "LD_LIBRARY_PATH", "value": "${workspaceFolder}/litlaunch-library-api/library/build/libs/main/linuxX86-64" }]
-      },
-      "windows": {
-        "name": "Test LitLaunch Library API Windows",
-        "type": "cppdbg",
-        "request": "launch",
-        "program": "${workspaceFolder}/litlaunch-library-api/test/build/exes/main/windowsX86-64/test.exe",
-      }
+      "environment": [
+        { "name": "config", "value": "Debug" },
+        { "name": "LD_LIBRARY_PATH", "value": "${workspaceFolder}/litlaunch-library-api/library/build/libs/main" }
+      ],
+      "cwd": "${workspaceFolder}/run"
     }
   ]
 }
