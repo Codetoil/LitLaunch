@@ -1,3 +1,7 @@
+#include <stddef.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include "litlaunch/location.h"
 #include "litlaunch/dependencies.h"
 #include "litlaunch/litlaunch-library-api.h"
@@ -10,40 +14,20 @@ int main()
 
     Module* apiModule = initLibraryApi();
 
-#ifndef _LITLAUNCH_SLIM_
-    const char* libApiModuleLocStr = resourceLocationToString(apiModule->id);
-    const char* libApiModuleVersionLocStr = resourceLocationToString(apiModule->version->id);
-    const char* libApiModuleVersionValue = getVersionString(apiModule->version);
-#else
-    char libApiModuleLocNamespace = getResourceLocationNamespace(apiModule->id);
-    char libApiModuleLocPath = getResourceLocationPath(apiModule->id);
-    char libApiModuleVersionLocNamespace = getResourceLocationNamespace(apiModule->version->id);
-    char libApiModuleVersionLocPath = getResourceLocationPath(apiModule->version->id);
-    char libApiModuleVersionValue = apiModule->version->version;
-#endif
+    const char* libApiModuleLocStr = getResourceLocationTotal(apiModule->id);
+    const char* libApiModuleVersionLocStr = getResourceLocationTotal(apiModule->version->id);
+    const char* libApiModuleVersionValue = getVersionValue(apiModule->version);
 
     printf("LitLaunch Library API Implementation:\n");
-#ifndef _LITLAUNCH_SLIM_
     printf("\tResource Location: %s\n", libApiModuleLocStr);
-#else
-    printf("\tResource Location: %x%x\n", libApiModuleLocNamespace, libApiModuleLocPath);
-#endif
     printf("\tVersion:\n");
-#ifndef _LITLAUNCH_SLIM_
     printf("\t\tResource Location: %s\n", libApiModuleVersionLocStr);
     printf("\t\tValue: %s\n", libApiModuleVersionValue);
-#else
-    printf("\t\tResource Location: %x%x\n", libApiModuleVersionLocNamespace, libApiModuleVersionLocPath);
-    printf("\t\tValue: %x\n", libApiModuleVersionValue);
-#endif
     printf("\tDependencies:\n");
     printf("\n");
     
+    freeResourceLocation(apiModule->version->id);
     freeVersion(apiModule->version);
-#ifndef _LITLAUNCH_SLIM_
-    free((void*) libApiModuleVersionLocStr);
-    free((void*) libApiModuleLocStr);
-#endif
     freeResourceLocation(apiModule->id);
     freeModule(apiModule);
     return 0;

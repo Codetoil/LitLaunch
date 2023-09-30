@@ -1,65 +1,44 @@
+#include <stddef.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include "litlaunch/litlaunch-library-api.h"
 #include "litlaunch/location.h"
 #include "litlaunch/dependencies.h"
 
-Module *moduleRegistry = NULL;
+// New entries are added to the top of the list
+Module *moduleRegistryTop = NULL;
+Module *moduleRegistryBottom = NULL;
 
 Module *initLibraryApi(void)
 {
-    ResourceLocation *versionLocation;
-#ifndef _LITLAUNCH_SLIM_
-    versionLocation = newResourceLocation("litlaunch", "litlaunch_library_api_version");
-#else
-    versionLocation = newResourceLocation(0x0001, 0x0000); // 0x0001:0x0000 in this context is the resource location of the version of the litlaunch library api in slim mode
-#endif
-    Version *version = newVersion(versionLocation, LITLAUNCH_LIBRARY_API_VERSION);
-
-    ResourceLocation *moduleLocation;
-#ifndef _LITLAUNCH_SLIM_
-    moduleLocation = newResourceLocation("litlaunch", "litlaunch_library_api");
-#else
-    moduleLocation = newResourceLocation(0x0001, 0x0000); // 0x0001:0x0000 in this context is the resource location of the litlaunch library api in slim mode
-#endif
+    ResourceLocation *versionLocation = newResourceLocation("litlaunch", 10, "litlaunch_library_api_version", 30, "litlaunch:litlaunch_library_api_version", 40);
+    Version *version = newVersion(versionLocation, "0.2.1", 6);
+    ResourceLocation *moduleLocation = newResourceLocation("litlaunch", 10, "litlaunch_library_api", 22, "litlaunch:litlaunch_library_api", 32);
     return newModule(moduleLocation, version, NULL);
 }
 
-#ifndef _LITLAUNCH_SLIM_
-Version *newVersion(ResourceLocation* id, const char* version)
+Version *newVersion(ResourceLocation* id, VersionValue version, VersionValueLength versionLength)
 {
-    Version* versionStruct = (Version*) malloc(sizeof(*versionStruct));
+    Version* versionStruct = (Version*) malloc(sizeof(*versionStruct) + versionLength);
     versionStruct->id = id;
-    utstring_new(versionStruct->version);
-    utstring_printf(versionStruct->version, "%s", version);
+    versionStruct->versionValue = version;
+    versionStruct->versionValueLength = versionLength;
     return versionStruct;
 }
 
-const char* getVersionString(Version *ptr)
+VersionValue getVersionValue(Version *ptr)
 {
-    return utstring_body(ptr->version);
+    return ptr->versionValue;
 }
 
-size_t getVersionLength(Version *ptr)
+VersionValueLength getVersionValueLength(Version *ptr)
 {
-    return utstring_len(ptr->version);
+    return ptr->versionValueLength;
 }
-
-
-#else
-Version *newVersion(ResourceLocation* id, char version)
-{
-    Version* versionStruct = (Version*) malloc(sizeof(*versionStruct));
-    versionStruct->id = id;
-    versionStruct->version = version;
-}
-#endif
 
 void freeVersion(Version* ptr)
 {
-    #ifndef _LITLAUNCH_SLIM_
-        utstring_free(ptr->version);
-    #endif
-
     free(ptr);
 }
 
@@ -70,86 +49,81 @@ Module *newModule(ResourceLocation* id, Version* version, DependencyDict* depend
     module->id = id;
     module->version = version;
     module->dependencyDict = dependencyDict;
-    HASH_ADD_KEYPTR(hh, moduleRegistry, id, sizeof(*id), module);
+    module->next = NULL;
+    module->prev = moduleRegistryTop;
+    if (!moduleRegistryBottom)
+    {
+        moduleRegistryBottom = module;
+    }
+    if (moduleRegistryTop)
+    {
+        moduleRegistryTop->next = module;
+    }
+    moduleRegistryTop = module;
     return module;
 }
 
 void freeModule(Module* ptr)
 {
-    HASH_DEL(moduleRegistry, ptr);
+    Module* next = ptr->next;
+    Module* prev = ptr->prev;
+    if (next)
+    {
+        next->prev=prev;
+    }
+    if (prev)
+    {
+        prev->next=next;
+    }
     free(ptr);
 }
 
 
 void freeResourceLocation(ResourceLocation *ptr)
 {
-#ifndef _LITLAUNCH_SLIM_
-    utstring_free(ptr->_namespace);
-    utstring_free(ptr->_path);
-#endif
     free(ptr);
 }
 
-#ifndef _LITLAUNCH_SLIM_
-ResourceLocation *newResourceLocation(const char* _namespace, const char* _path)
+ResourceLocation *newResourceLocation(ResourceLocationNamespace _namespace, ResourceLocationNamespaceLength _namespaceLength,
+    ResourceLocationPath _path, ResourceLocationPathLength _pathLength, ResourceLocationTotal _total, ResourceLocationTotalLength _totalLength)
 {
-    ResourceLocation* ptr = (ResourceLocation*) malloc(sizeof(*ptr));
-
-    utstring_new(ptr->_namespace);
-    utstring_new(ptr->_path);
-    utstring_printf(ptr->_namespace, "%s", _namespace);
-    utstring_printf(ptr->_path, "%s", _path);
-    return ptr;
-}
-
-const char* getResourceLocationNamespace(ResourceLocation *ptr)
-{
-    return utstring_body(ptr->_namespace);
-}
-
-size_t getResourceLocationNamespaceLength(ResourceLocation *ptr)
-{
-    return utstring_len(ptr->_namespace);
-}
-
-const char* getResourceLocationPath(ResourceLocation *ptr)
-{
-    return utstring_body(ptr->_path);
-}
-
-size_t getResourceLocationPathLength(ResourceLocation *ptr)
-{
-    return utstring_len(ptr->_path);
-}
-
-const char* resourceLocationToString(ResourceLocation *ptr)
-{
-    const char* _namespace = getResourceLocationNamespace(ptr);
-    const char* _path = getResourceLocationPath(ptr);
-    char* result = malloc(getResourceLocationNamespaceLength(ptr) 
-        + sizeof(char) + getResourceLocationPathLength(ptr));
-    strcpy(result, _namespace);
-    strcat(result, ":");
-    strcat(result, _path);
-    return result;
-}
-#else
-ResourceLocation *newResourceLocation(char _namespace, char _path)
-{
-    ResourceLocation* ptr = (ResourceLocation*) malloc(sizeof(*ptr));
+    ResourceLocation* ptr = (ResourceLocation*) malloc(sizeof(*ptr) + (_namespaceLength + _pathLength + _totalLength) * sizeof(char));
 
     ptr->_namespace = _namespace;
+    ptr->_namespaceLength = _namespaceLength;
     ptr->_path = _path;
+    ptr->_pathLength = _pathLength;
+    ptr->_total = _total;
+    ptr->_totalLength = _totalLength;
     return ptr;
 }
 
-char getResourceLocationNamespace(ResourceLocation *ptr)
+ResourceLocationNamespace getResourceLocationNamespace(ResourceLocation *ptr)
 {
     return ptr->_namespace;
 }
 
-char getResourceLocationPath(ResourceLocation *ptr)
+ResourceLocationNamespaceLength getResourceLocationNamespaceLength(ResourceLocation *ptr)
+{
+    return ptr->_namespaceLength;
+}
+
+ResourceLocationPath getResourceLocationPath(ResourceLocation *ptr)
 {
     return ptr->_path;
 }
-#endif
+
+ResourceLocationPathLength getResourceLocationPathLength(ResourceLocation *ptr)
+{
+    return ptr->_pathLength;
+}
+
+ResourceLocationNamespace getResourceLocationTotal(ResourceLocation *ptr)
+{
+    return ptr->_total;
+}
+
+ResourceLocationNamespaceLength getResourceLocationTotalLength(ResourceLocation *ptr)
+{
+    return ptr->_totalLength;
+}

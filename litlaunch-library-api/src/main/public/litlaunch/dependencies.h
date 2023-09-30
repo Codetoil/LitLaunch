@@ -1,8 +1,6 @@
 #pragma once
 
 #include "location.h"
-#include "uthash/utstring.h"
-#include "uthash/uthash.h"
 
 typedef enum EnumDependencyRequirement
 {
@@ -22,32 +20,40 @@ typedef struct VersionStruct Version;
 
 typedef VersionComparatorResult (*VersionComparator)(const Version*);
 
+typedef struct VersionSchemaStruct VersionSchema;
+
 typedef struct VersionSchemaStruct
 {
     ResourceLocation *id;
     VersionComparator* withinBounds;
-    UT_hash_handle hh;
+    VersionSchema* next;
 } VersionSchema;
+
+
+typedef const char* VersionValue;
+typedef unsigned int VersionValueLength;
 
 typedef struct VersionStruct
 {
     ResourceLocation *id;
-#ifndef _LITLAUNCH_SLIM_
-    UT_string* version;
-#else
-    char version;
-#endif
+    VersionValue versionValue;
+    VersionValueLength versionValueLength;
 } Version;
 
 typedef struct DependencyDictStruct DependencyDict;
+
+typedef struct ModuleStruct Module;
 
 typedef struct ModuleStruct
 {
     ResourceLocation *id;
     Version *version;
     DependencyDict *dependencyDict;
-    UT_hash_handle hh;
+    Module* next;
+    Module* prev;
 } Module;
+
+typedef struct DependencyDictStruct DependencyDict;
 
 typedef struct DependencyDictStruct
 {
@@ -55,20 +61,17 @@ typedef struct DependencyDictStruct
     Module *dependency;
     Version *versionRequired;
     DependencyRequirement *dependencyRequirement;
-    UT_hash_handle hh;
+    DependencyDict* next;
+    DependencyDict* prev;
 } DependencyDict;
 
 extern Module *newModule(ResourceLocation* id, Version* version, DependencyDict* dependencyDict);
 extern void freeModule(Module* ptr);
 
-#ifndef _LITLAUNCH_SLIM
-extern Version *newVersion(ResourceLocation* id, const char* version);
-extern const char* getVersionString(Version *ptr);
-extern size_t getVersionLength(Version *ptr);
-#else
-extern Version *newVersion(ResourceLocation* id, char version);
-#endif
+extern Version *newVersion(ResourceLocation* id, VersionValue versionValue, VersionValueLength versionValueLength);
+extern VersionValue getVersionValue(Version *ptr);
+extern VersionValueLength getVersionValueLength(Version *ptr);
 extern void freeVersion(Version* ptr);
 
-extern VersionSchema *newVersionSchema(ResourceLocation* id, VersionComparator* withinBounds);
-extern void freeVersionSchema(VersionSchema* ptr);
+extern VersionSchema *newVersionSchema(ResourceLocation* id, VersionComparator* withinBounds); // Unimplemented
+extern void freeVersionSchema(VersionSchema* ptr); // Unimplemented
