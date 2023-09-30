@@ -54,5 +54,5 @@
     "**/.vscode",
     "**/.vscode/**"
   ],
-  "cmake.sourceDirectory": "/home/codetoil/LitLaunch/litlaunch-library-api/library"
+  "cmake.sourceDirectory": "/home/codetoil/LitLaunch"
 }

@@ -41,8 +41,8 @@ int main()
     
     freeVersion(apiModule->version);
 #ifndef _LITLAUNCH_SLIM_
-    free(libApiModuleVersionLocStr);
-    free(libApiModuleLocStr);
+    free((void*) libApiModuleVersionLocStr);
+    free((void*) libApiModuleLocStr);
 #endif
     freeResourceLocation(apiModule->id);
     freeModule(apiModule);
