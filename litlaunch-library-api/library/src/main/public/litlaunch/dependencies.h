@@ -20,7 +20,7 @@ typedef enum EnumVersionComparatorResult
 
 typedef struct VersionStruct Version;
 
-typedef VersionComparatorResult (*VersionComparator)(const struct Version*);
+typedef VersionComparatorResult (*VersionComparator)(const Version*);
 
 typedef struct VersionSchemaStruct
 {
