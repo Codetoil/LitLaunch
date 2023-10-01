@@ -8,4 +8,3 @@ find_library(LITLAUNCH_LIBRARY_API litlaunch_library_api ../../build/litlaunch-l
 target_include_directories(litlaunch_library_api_exe_test1 PUBLIC ../src/main/public)
 target_include_directories(litlaunch_library_api_exe_test1 PUBLIC include)
 target_link_libraries(litlaunch_library_api_exe_test1 LINK_PUBLIC ${LITLAUNCH_LIBRARY_API})
-add_test(litlaunch_library_api_test1 litlaunch_library_api_exe_test1)

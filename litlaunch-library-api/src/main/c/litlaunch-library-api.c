@@ -10,11 +10,13 @@
 Module *moduleRegistryTop = NULL;
 Module *moduleRegistryBottom = NULL;
 
+const char* litlaunchNamespace = "litlaunch";
+
 Module *initLibraryApi(void)
 {
-    ResourceLocation *versionLocation = newResourceLocation("litlaunch", 10, "litlaunch_library_api_version", 30, "litlaunch:litlaunch_library_api_version", 40);
+    ResourceLocation *versionLocation = newResourceLocation(litlaunchNamespace, 10, "litlaunch_library_api_version", 30, "litlaunch:litlaunch_library_api_version", 40);
     Version *version = newVersion(versionLocation, "0.2.1", 6);
-    ResourceLocation *moduleLocation = newResourceLocation("litlaunch", 10, "litlaunch_library_api", 22, "litlaunch:litlaunch_library_api", 32);
+    ResourceLocation *moduleLocation = newResourceLocation(litlaunchNamespace, 10, "litlaunch_library_api", 22, "litlaunch:litlaunch_library_api", 32);
     return newModule(moduleLocation, version, NULL);
 }
 
