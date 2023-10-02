@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(litlaunch-library-api VERSION 0.2.1.1 LANGUAGES C)
+project(litlaunch-library-api VERSION 0.2.1.2 LANGUAGES C)
 
 set(CMAKE_C_STANDARD 90)
 

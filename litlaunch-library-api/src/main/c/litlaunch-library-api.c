@@ -34,7 +34,7 @@ const char* litlaunchNamespace = "litlaunch";
 Module *initLibraryApi(void)
 {
     ResourceLocation *versionLocation = newResourceLocation(litlaunchNamespace, 10, "litlaunch_library_api_version", 30, "litlaunch:litlaunch_library_api_version", 40);
-    Version *version = newVersion(versionLocation, "0.2.1+build.1", 6);
+    Version *version = newVersion(versionLocation, "0.2.1+build.2", 6);
     ResourceLocation *moduleLocation = newResourceLocation(litlaunchNamespace, 10, "litlaunch_library_api", 22, "litlaunch:litlaunch_library_api", 32);
     ResourceLocation *dependencyDictLocation = newResourceLocation(litlaunchNamespace, 10, "litlaunch_library_api_dependency_dict", 38, "litlaunch:litlaunch_library_api_dependency_dict", 48);
     DependencyDict *dependencyDict = newDependencyDict(dependencyDictLocation);
@@ -124,6 +124,7 @@ DependencyDict *newDependencyDict(ResourceLocation* id)
     dependencyDict->id = id;
     dependencyDict->dependencyDictBottom = NULL;
     dependencyDict->dependencyDictTop = NULL;
+    return dependencyDict;
 }
 
 DependencyDictElement *addToDependencyDict(DependencyDict* dependencyDict,
