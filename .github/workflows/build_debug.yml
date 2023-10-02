@@ -31,6 +31,6 @@ jobs:
         with:
           name: Artifacts
           path: |
-            build/litlaunch-library-api/liblitlaunch-library-api.a
-            build/litlaunch-library-api/test/litlaunch-library-api-exe-test1
+            ${{github.workspace}}/build/litlaunch-library-api/liblitlaunch-library-api.a
+            ${{github.workspace}}/build/litlaunch-library-api/test/litlaunch-library-api-exe-test1
             
