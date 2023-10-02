@@ -3,13 +3,10 @@
         {
             "name": "linux-gcc-x64",
             "includePath": [
-                "${workspaceFolder}/**",
-                "${JAVA_HOME}/include",
-                "${JAVA_HOME}/include/linux",
-                "${workspaceFolder}/litlaunch-library-api/library/src/main/public"
+                "${workspaceFolder}/**"
             ],
             "compilerPath": "/usr/bin/gcc",
-            "cStandard": "gnu99",
+            "cStandard": "gnu89",
             "cppStandard": "gnu++98",
             "intelliSenseMode": "linux-gcc-x64",
             "compilerArgs": [

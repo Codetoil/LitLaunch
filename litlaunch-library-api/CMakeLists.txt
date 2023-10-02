@@ -1,11 +1,12 @@
 cmake_minimum_required(VERSION 3.10)
+project(litlaunch-library-api VERSION 0.2.1.1 LANGUAGES C)
 
-set(CMAKE_CXX_STANDARD 98)
+set(CMAKE_C_STANDARD 90)
 
-add_library(litlaunch_library_api STATIC src/main/c/litlaunch-library-api.c)
+add_library(litlaunch-library-api STATIC src/main/c/litlaunch-library-api.c)
 
-target_include_directories(litlaunch_library_api PUBLIC include src/main/public)
+target_include_directories(litlaunch-library-api PUBLIC include src/main/public)
 
-if(EXISTS ../build/litlaunch-library-api/liblitlaunch_library_api.a)
+if(EXISTS ../build/litlaunch-library-api/liblitlaunch-library-api.a)
 add_subdirectory(test)
 endif()
