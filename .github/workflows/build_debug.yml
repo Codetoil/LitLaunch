@@ -21,12 +21,12 @@ jobs:
         run: cmake -B ${{env.BUILD_LOC}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DBUILD_TYPE=${{env.BUILD_TYPE}}
       - name: Build litlaunch-library-api
         # Build your program with the given configuration
-        run: cmake --build ${{env.BUILD_LOC}} --config ${{env.BUILD_TYPE}} --target litlaunch-library-api -DBUILD_TYPE=${{env.BUILD_TYPE}}
+        run: cmake --build ${{env.BUILD_LOC}} --config ${{env.BUILD_TYPE}} --target litlaunch-library-api
       - name: Configure CMake (Second Time)
         run: cmake -B ${{env.BUILD_LOC}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DBUILD_TYPE=${{env.BUILD_TYPE}}
       - name: Build litlaunch-library-api-exe-test1
         # Build your program with the given configuration
-        run: cmake --build ${{env.BUILD_LOC}} --config ${{env.BUILD_TYPE}} --target litlaunch-library-api-exe-test1 -DBUILD_TYPE=${{env.BUILD_TYPE}}
+        run: cmake --build ${{env.BUILD_LOC}} --config ${{env.BUILD_TYPE}} --target litlaunch-library-api-exe-test1
       - name: capture build artifacts
         uses: actions/upload-artifact@v3
         with:
