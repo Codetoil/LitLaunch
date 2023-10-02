@@ -24,14 +24,17 @@ jobs:
         # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
         # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
         run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
-      - name: Build
+      - name: Build litlaunch-library-api
         # Build your program with the given configuration
-        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target litlaunch-library-api
+      - name: Build litlaunch-library-api-exe-test1
+        # Build your program with the given configuration
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target litlaunch-library-api-exe-test1
       - name: capture build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: Artifacts
           path: |
-            build/litlaunch-library-api/litlaunch-library-api.a
+            build/litlaunch-library-api/liblitlaunch-library-api.a
             build/litlaunch-library-api/test/litlaunch-library-api-exe-test1
             
