@@ -55,5 +55,8 @@
     "**/.vscode",
     "**/.vscode/**"
   ],
-  "cmake.sourceDirectory": "/home/codetoil/LitLaunch"
+  "cmake.sourceDirectory": "/home/codetoil/LitLaunch",
+  "cmake.environment": {
+    "BUILD_LOC": "${workspaceFolder}/build"
+  }
 }

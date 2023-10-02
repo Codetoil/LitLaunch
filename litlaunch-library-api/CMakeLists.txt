@@ -7,6 +7,6 @@ add_library(litlaunch-library-api STATIC src/main/c/litlaunch-library-api.c)
 
 target_include_directories(litlaunch-library-api PUBLIC include src/main/public)
 
-if(EXISTS ../build/litlaunch-library-api/liblitlaunch-library-api.a)
+if(EXISTS $ENV{BUILD_LOC}/litlaunch-library-api/liblitlaunch-library-api.a)
 add_subdirectory(test)
 endif()
