@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2023 Anthony Michalek
+ * Copyright (C) 2019-2025 Anthony Michalek
  * Contact me on Discord: @codetoil, or by Email: ianthisawesomee@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -90,10 +90,12 @@ typedef struct DependencyDictStruct
 extern Module *newModule(ResourceLocation* id, Version* version, DependencyDict* dependencyDict);
 extern void freeModule(Module* ptr);
 
-extern Version *newVersion(ResourceLocation* id, VersionValue versionValue, VersionValueLength versionValueLength);
+extern Version *newVersion(ResourceLocation* id, VersionValue versionValue,
+    VersionValueLength versionValueLength);
 extern void freeVersion(Version* ptr);
 
 extern DependencyDict *newDependencyDict(ResourceLocation* id);
-extern DependencyDictElement *addToDependencyDict(DependencyDict* dict, ResourceLocation* id, Module* module, VersionComparator* versionComparator, u_int8_t flags);
+extern DependencyDictElement *addToDependencyDict(DependencyDict* dict, ResourceLocation* id,
+    Module* module, VersionComparator* versionComparator, u_int8_t flags);
 extern void removeFromDependencyDictAndFree(DependencyDict* dict, DependencyDictElement* ptr);
 extern void freeDependencyDict(DependencyDict* ptr);

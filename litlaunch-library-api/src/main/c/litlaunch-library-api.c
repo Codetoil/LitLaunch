@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2023 Anthony Michalek
+ * Copyright (C) 2019-2025 Anthony Michalek
  * Contact me on Discord: @codetoil, or by Email: ianthisawesomee@gmail.com
  *
  * This program is free software; you can redistribute it and/or
@@ -33,17 +33,23 @@ const char* litlaunchNamespace = "litlaunch";
 
 Module *initLibraryApi(void)
 {
-    ResourceLocation *versionLocation = newResourceLocation(litlaunchNamespace, 10, "litlaunch_library_api_version", 30, "litlaunch:litlaunch_library_api_version", 40);
-    Version *version = newVersion(versionLocation, "0.2.1+build.2", 6);
-    ResourceLocation *moduleLocation = newResourceLocation(litlaunchNamespace, 10, "litlaunch_library_api", 22, "litlaunch:litlaunch_library_api", 32);
-    ResourceLocation *dependencyDictLocation = newResourceLocation(litlaunchNamespace, 10, "litlaunch_library_api_dependency_dict", 38, "litlaunch:litlaunch_library_api_dependency_dict", 48);
+    ResourceLocation *versionLocation = newResourceLocation(litlaunchNamespace, 10,
+        "litlaunch_library_api_version", 30,
+        "litlaunch:litlaunch_library_api_version", 40);
+    Version *version = newVersion(versionLocation, "0.2.1+build.3", 6);
+    ResourceLocation *moduleLocation = newResourceLocation(litlaunchNamespace, 10,
+        "litlaunch_library_api", 22,
+        "litlaunch:litlaunch_library_api",32);
+    ResourceLocation *dependencyDictLocation = newResourceLocation(litlaunchNamespace, 10,
+        "litlaunch_library_api_dependency_dict", 38,
+        "litlaunch:litlaunch_library_api_dependency_dict", 48);
     DependencyDict *dependencyDict = newDependencyDict(dependencyDictLocation);
     return newModule(moduleLocation, version, dependencyDict);
 }
 
 Version *newVersion(ResourceLocation* id, VersionValue version, VersionValueLength versionLength)
 {
-    Version* versionStruct = (Version*) malloc(sizeof(*versionStruct) + versionLength);
+    Version* versionStruct = malloc(sizeof(*versionStruct) + versionLength);
     versionStruct->id = id;
     versionStruct->versionValue = version;
     versionStruct->versionValueLength = versionLength;
@@ -57,7 +63,7 @@ void freeVersion(Version* ptr)
 
 Module *newModule(ResourceLocation* id, Version* version, DependencyDict* dependencyDict)
 {
-    Module* module = (Module*) malloc(sizeof(*module));
+    Module* module = malloc(sizeof(*module));
     module->id = id;
     module->version = version;
     module->dependencyDict = dependencyDict;
@@ -100,9 +106,10 @@ void freeModule(Module* ptr)
 
 
 ResourceLocation *newResourceLocation(ResourceLocationNamespace _namespace, ResourceLocationNamespaceLength _namespaceLength,
-    ResourceLocationPath _path, ResourceLocationPathLength _pathLength, ResourceLocationTotal _total, ResourceLocationTotalLength _totalLength)
+    ResourceLocationPath _path, ResourceLocationPathLength _pathLength, ResourceLocationTotal _total,
+    ResourceLocationTotalLength _totalLength)
 {
-    ResourceLocation* ptr = (ResourceLocation*) malloc(sizeof(*ptr) + (_namespaceLength + _pathLength + _totalLength) * sizeof(char));
+    ResourceLocation* ptr = malloc(sizeof(*ptr) + (_namespaceLength + _pathLength + _totalLength) * sizeof(char));
 
     ptr->_namespace = _namespace;
     ptr->_namespaceLength = _namespaceLength;
@@ -120,7 +127,7 @@ void freeResourceLocation(ResourceLocation *ptr)
 
 DependencyDict *newDependencyDict(ResourceLocation* id)
 {
-    DependencyDict* dependencyDict = (DependencyDict*) malloc(sizeof(*dependencyDict));
+    DependencyDict* dependencyDict = malloc(sizeof(*dependencyDict));
     dependencyDict->id = id;
     dependencyDict->dependencyDictBottom = NULL;
     dependencyDict->dependencyDictTop = NULL;
@@ -130,7 +137,7 @@ DependencyDict *newDependencyDict(ResourceLocation* id)
 DependencyDictElement *addToDependencyDict(DependencyDict* dependencyDict,
     ResourceLocation* id, Module* module, VersionComparator* versionComparator, u_int8_t flags)
 {
-    DependencyDictElement* dependencyDictElement = (DependencyDictElement*) malloc(sizeof(*dependencyDictElement));
+    DependencyDictElement* dependencyDictElement = malloc(sizeof(*dependencyDictElement));
     dependencyDictElement->id = id;
     dependencyDictElement->versionComparator = versionComparator;
     dependencyDictElement->flags = flags;
