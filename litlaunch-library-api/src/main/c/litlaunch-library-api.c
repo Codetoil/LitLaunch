@@ -29,18 +29,22 @@
 Module *moduleRegistryTop = NULL;
 Module *moduleRegistryBottom = NULL;
 
-const char* litlaunchNamespace = "litlaunch";
+ResourceLocationNamespace litlaunchNamespace = "litlaunch";
+ResourceLocationNamespaceLength litlaunchNamespaceLength = 10;
 
 Module *initLibraryApi(void)
 {
-    ResourceLocation *versionLocation = newResourceLocation(litlaunchNamespace, 10,
+    ResourceLocation *versionLocation = newResourceLocation(
+        litlaunchNamespace, litlaunchNamespaceLength,
         "litlaunch_library_api_version", 30,
         "litlaunch:litlaunch_library_api_version", 40);
-    Version *version = newVersion(versionLocation, "0.2.1+build.3", 6);
-    ResourceLocation *moduleLocation = newResourceLocation(litlaunchNamespace, 10,
+    Version *version = newVersion(versionLocation, "0.2.1+build.5", 6);
+    ResourceLocation *moduleLocation = newResourceLocation(
+        litlaunchNamespace, litlaunchNamespaceLength,
         "litlaunch_library_api", 22,
         "litlaunch:litlaunch_library_api",32);
-    ResourceLocation *dependencyDictLocation = newResourceLocation(litlaunchNamespace, 10,
+    ResourceLocation *dependencyDictLocation = newResourceLocation(
+        litlaunchNamespace, litlaunchNamespaceLength,
         "litlaunch_library_api_dependency_dict", 38,
         "litlaunch:litlaunch_library_api_dependency_dict", 48);
     DependencyDict *dependencyDict = newDependencyDict(dependencyDictLocation);
@@ -105,7 +109,8 @@ void freeModule(Module* ptr)
 }
 
 
-ResourceLocation *newResourceLocation(ResourceLocationNamespace _namespace, ResourceLocationNamespaceLength _namespaceLength,
+ResourceLocation *newResourceLocation(
+    ResourceLocationNamespace _namespace, ResourceLocationNamespaceLength _namespaceLength,
     ResourceLocationPath _path, ResourceLocationPathLength _pathLength, ResourceLocationTotal _total,
     ResourceLocationTotalLength _totalLength)
 {
@@ -139,6 +144,7 @@ DependencyDictElement *addToDependencyDict(DependencyDict* dependencyDict,
 {
     DependencyDictElement* dependencyDictElement = malloc(sizeof(*dependencyDictElement));
     dependencyDictElement->id = id;
+    dependencyDictElement->dependency = module;
     dependencyDictElement->versionComparator = versionComparator;
     dependencyDictElement->flags = flags;
     dependencyDictElement->next = NULL;
@@ -181,4 +187,13 @@ void removeFromDependencyDictAndFree(DependencyDict* dependencyDict, DependencyD
 void freeDependencyDict(DependencyDict* ptr)
 {
     free(ptr);
+}
+
+void freeLitLaunchLibraryApi(Module* apiModule) {
+    freeResourceLocation(apiModule->version->id);
+    freeVersion(apiModule->version);
+    freeResourceLocation(apiModule->dependencyDict->id);
+    freeDependencyDict(apiModule->dependencyDict);
+    freeResourceLocation(apiModule->id);
+    freeModule(apiModule);
 }

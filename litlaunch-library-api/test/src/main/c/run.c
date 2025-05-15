@@ -25,6 +25,18 @@
 #include "litlaunch/dependencies.h"
 #include "litlaunch/litlaunch-library-api.h"
 
+void printModule(Module* module) {
+    printf("\tResource Location: %s\n", module->id->_total);
+    printf("\tVersion:\n");
+    printf("\t\tResource Location: %s\n", module->version->id->_total);
+    printf("\t\tValue: %s\n", module->version->versionValue);
+    printf("\tDependency Dict:\n");
+    printf("\t\tResource Location: %s\n", module->dependencyDict->id->_total);
+    printf("\t\tDependency Dict Entries:\n");
+    printf("\t\t\tNOT IMPLEMENTED\n");
+    printf("\n");
+}
+
 int main()
 {
     printf("DYNAMIC_DEP: %i\n", DYNAMIC_DEP);
@@ -36,20 +48,8 @@ int main()
     Module* apiModule = initLibraryApi();
 
     printf("LitLaunch Library API Implementation:\n");
-    printf("\tResource Location: %s\n", apiModule->id->_total);
-    printf("\tVersion:\n");
-    printf("\t\tResource Location: %s\n", apiModule->version->id->_total);
-    printf("\t\tValue: %s\n", apiModule->version->versionValue);
-    printf("\tDependency Dict:\n");
-    printf("\t\tResource Location: %s\n", apiModule->dependencyDict->id->_total);
-    printf("\t\tDependency Dict Entries:\n");
-    printf("\n");
-    
-    freeResourceLocation(apiModule->version->id);
-    freeVersion(apiModule->version);
-    freeResourceLocation(apiModule->dependencyDict->id);
-    freeDependencyDict(apiModule->dependencyDict);
-    freeResourceLocation(apiModule->id);
-    freeModule(apiModule);
+    printModule(apiModule);
+
+    freeLitLaunchLibraryApi(apiModule);
     return 0;
 }
