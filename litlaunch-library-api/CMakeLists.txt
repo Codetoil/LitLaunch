@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.15)
 project(litlaunch-library-api VERSION 0.2.1.8 LANGUAGES C)
 
 set(CMAKE_C_STANDARD 90)
@@ -9,7 +9,7 @@ add_library(litlaunch-library-api STATIC src/main/c/litlaunch-library-api.c
 set_target_properties(
         litlaunch-library-api
         PROPERTIES
-            OUTPUT_NAME "litlaunch-library-api-0.2.1+build.8-$<CONFIGURATION>"
+            OUTPUT_NAME "litlaunch-library-api-0.2.1+build.8"
 )
 
 target_include_directories(litlaunch-library-api PUBLIC include src/main/public)
@@ -20,6 +20,4 @@ add_custom_command(TARGET litlaunch-library-api POST_BUILD
         "${PROJECT_SOURCE_DIR}/builds/$<TARGET_FILE_NAME:litlaunch-library-api>"
         COMMENT "Copying to output directory")
 
-if(EXISTS "$<TARGET_FILE:litlaunch-library-api>")
 add_subdirectory(test)
-endif()
