@@ -4,7 +4,7 @@ set(CMAKE_C_STANDARD 90)
 add_executable(litlaunch-library-api-test1 src/main/c/run.c)
 
 find_library(LITLAUNCH_LIBRARY_API
-        NAMES litlaunch-library-api litlaunch-library-api-0.2.1+build.8
+        NAMES litlaunch-library-api "$<TARGET_FILE_NAME:litlaunch-library-api>"
         PATHS $ENV{BUILD_LOC}/litlaunch-library-api)
 
 target_include_directories(litlaunch-library-api-test1 PUBLIC ../src/main/public)

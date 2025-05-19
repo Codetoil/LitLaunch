@@ -9,11 +9,17 @@ add_library(litlaunch-library-api STATIC src/main/c/litlaunch-library-api.c
 set_target_properties(
         litlaunch-library-api
         PROPERTIES
-            OUTPUT_NAME "litlaunch-library-api-0.2.1+build.8"
+            OUTPUT_NAME "litlaunch-library-api-0.2.1+build.8-$<CONFIGURATION>"
 )
 
 target_include_directories(litlaunch-library-api PUBLIC include src/main/public)
 
-if(EXISTS $ENV{BUILD_LOC}/litlaunch-library-api/liblitlaunch-library-api-0.2.1+build.8.a)
+add_custom_command(TARGET litlaunch-library-api POST_BUILD
+        COMMAND "${CMAKE_COMMAND}" -E copy
+        "$<TARGET_FILE:litlaunch-library-api>"
+        "${PROJECT_SOURCE_DIR}/builds/$<TARGET_FILE_NAME:litlaunch-library-api>"
+        COMMENT "Copying to output directory")
+
+if(EXISTS "$<TARGET_FILE:litlaunch-library-api>")
 add_subdirectory(test)
 endif()
