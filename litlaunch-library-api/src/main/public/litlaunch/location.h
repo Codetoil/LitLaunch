@@ -19,14 +19,15 @@
 
 #pragma once
 
-#include <stddef.h>
-
 typedef const char* ResourceLocationNamespace;
 typedef unsigned int ResourceLocationNamespaceLength;
 typedef const char* ResourceLocationPath;
 typedef unsigned int ResourceLocationPathLength;
 typedef const char* ResourceLocationTotal;
 typedef unsigned int ResourceLocationTotalLength;
+
+extern const ResourceLocationNamespace litlaunchNamespace;
+extern const ResourceLocationNamespaceLength litlaunchNamespaceLength;
 
 typedef struct ResourceLocationStruct
 {
@@ -38,8 +39,8 @@ typedef struct ResourceLocationStruct
     ResourceLocationTotalLength _totalLength;
 } ResourceLocation;
 
-extern ResourceLocation *newResourceLocation(ResourceLocationNamespace _namespace,
-    ResourceLocationNamespaceLength _namespaceLength,
+extern ResourceLocation *newResourceLocation(
+    ResourceLocationNamespace _namespace, ResourceLocationNamespaceLength _namespaceLength,
     ResourceLocationPath _path, ResourceLocationPathLength _pathLength,
     ResourceLocationTotal _total, ResourceLocationTotalLength _totalLength);
 extern ResourceLocationNamespace getResourceLocationNamespace(ResourceLocation *ptr);

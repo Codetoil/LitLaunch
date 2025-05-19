@@ -17,15 +17,12 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#include <stddef.h>
-#include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 #include "litlaunch/location.h"
 #include "litlaunch/dependencies.h"
 #include "litlaunch/litlaunch-library-api.h"
 
-void printModule(Module* module) {
+void printModule(const Module* module) {
     printf("\tResource Location: %s\n", module->id->_total);
     printf("\tVersion:\n");
     printf("\t\tResource Location: %s\n", module->version->id->_total);

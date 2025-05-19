@@ -19,7 +19,8 @@
 
 #pragma once
 
-#include <stdbool.h>
+#include <sys/types.h>
+
 #include "location.h"
 
 typedef enum EnumDependencyType
