@@ -47,13 +47,12 @@ typedef struct VersionStruct Version;
 typedef VersionComparatorResult (*VersionComparator)(const Version*);
 
 typedef const char* VersionValue;
-typedef unsigned int VersionValueLength;
 
 typedef struct VersionStruct
 {
     ResourceLocation *id;
     VersionValue versionValue;
-    VersionValueLength versionValueLength;
+    size_t versionValueLength;
 } Version;
 
 typedef struct DependencyDictStruct DependencyDict;
@@ -91,12 +90,11 @@ typedef struct DependencyDictStruct
 extern Module *newModule(ResourceLocation* id, Version* version, DependencyDict* dependencyDict);
 extern void freeModule(Module* ptr);
 
-extern Version *newVersion(ResourceLocation* id, VersionValue versionValue,
-    VersionValueLength versionValueLength);
+extern Version *newVersion(ResourceLocation* id, VersionValue versionValue);
 extern void freeVersion(Version* ptr);
 
 extern DependencyDict *newDependencyDict(ResourceLocation* id);
-extern DependencyDictElement *addToDependencyDict(DependencyDict* dict, ResourceLocation* id,
+extern DependencyDictElement *addToDependencyDict(DependencyDict* dependencyDict, ResourceLocation* id,
     Module* module, VersionComparator* versionComparator, u_int8_t flags);
-extern void removeFromDependencyDictAndFree(DependencyDict* dict, DependencyDictElement* ptr);
+extern void removeFromDependencyDictAndFree(DependencyDict* dependencyDict, DependencyDictElement* ptr);
 extern void freeDependencyDict(DependencyDict* ptr);

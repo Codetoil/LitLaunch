@@ -23,19 +23,13 @@
 
 Module *initLibraryApi(void)
 {
-    ResourceLocation *versionLocation = newResourceLocation(
-        litlaunchNamespace, litlaunchNamespaceLength,
-        "litlaunch_library_api_version", 30,
-        "litlaunch:litlaunch_library_api_version", 40);
-    Version *version = newVersion(versionLocation, "0.2.1+build.8", 6);
-    ResourceLocation *moduleLocation = newResourceLocation(
-        litlaunchNamespace, litlaunchNamespaceLength,
-        "litlaunch_library_api", 22,
-        "litlaunch:litlaunch_library_api",32);
-    ResourceLocation *dependencyDictLocation = newResourceLocation(
-        litlaunchNamespace, litlaunchNamespaceLength,
-        "litlaunch_library_api_dependency_dict", 38,
-        "litlaunch:litlaunch_library_api_dependency_dict", 48);
+    ResourceLocation *versionLocation =
+        newResourceLocation(litlaunchNamespace, "litlaunch_library_api_version");
+    Version *version = newVersion(versionLocation, "0.2.2+build.0");
+    ResourceLocation *moduleLocation =
+        newResourceLocation(litlaunchNamespace, "litlaunch_library_api");
+    ResourceLocation *dependencyDictLocation =
+        newResourceLocation(litlaunchNamespace, "litlaunch_library_api_dependency_dict");
     DependencyDict *dependencyDict = newDependencyDict(dependencyDictLocation);
     return newModule(moduleLocation, version, dependencyDict);
 }

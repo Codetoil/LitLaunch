@@ -6,13 +6,15 @@
 #include "litlaunch/dependencies.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 // New entries are added to the top of the list
 Module *moduleRegistryTop = NULL;
 Module *moduleRegistryBottom = NULL;
 
-Version *newVersion(ResourceLocation* id, VersionValue versionValue, VersionValueLength versionValueLength)
+Version *newVersion(ResourceLocation* id, const VersionValue versionValue)
 {
+    const size_t versionValueLength = strlen(versionValue);
     Version* versionStruct = malloc(sizeof(*versionStruct) + versionValueLength);
     versionStruct->id = id;
     versionStruct->versionValue = versionValue;
@@ -78,7 +80,7 @@ DependencyDict *newDependencyDict(ResourceLocation* id)
 }
 
 DependencyDictElement *addToDependencyDict(DependencyDict* dependencyDict,
-    ResourceLocation* id, Module* module, VersionComparator* versionComparator, u_int8_t flags)
+    ResourceLocation* id, Module* module, VersionComparator* versionComparator, const u_int8_t flags)
 {
     DependencyDictElement* dependencyDictElement = malloc(sizeof(*dependencyDictElement));
     dependencyDictElement->id = id;

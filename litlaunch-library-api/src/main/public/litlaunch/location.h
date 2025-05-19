@@ -18,35 +18,29 @@
 */
 
 #pragma once
+#include <stddef.h>
 
 typedef const char* ResourceLocationNamespace;
-typedef unsigned int ResourceLocationNamespaceLength;
 typedef const char* ResourceLocationPath;
-typedef unsigned int ResourceLocationPathLength;
 typedef const char* ResourceLocationTotal;
-typedef unsigned int ResourceLocationTotalLength;
 
 extern const ResourceLocationNamespace litlaunchNamespace;
-extern const ResourceLocationNamespaceLength litlaunchNamespaceLength;
 
 typedef struct ResourceLocationStruct
 {
     ResourceLocationNamespace _namespace;
-    ResourceLocationNamespaceLength _namespaceLength;
+    size_t _namespaceLength;
     ResourceLocationPath _path;
-    ResourceLocationPathLength _pathLength;
+    size_t _pathLength;
     ResourceLocationTotal _total;
-    ResourceLocationTotalLength _totalLength;
+    size_t _totalLength;
 } ResourceLocation;
 
-extern ResourceLocation *newResourceLocation(
-    ResourceLocationNamespace _namespace, ResourceLocationNamespaceLength _namespaceLength,
-    ResourceLocationPath _path, ResourceLocationPathLength _pathLength,
-    ResourceLocationTotal _total, ResourceLocationTotalLength _totalLength);
+extern ResourceLocation *newResourceLocation(ResourceLocationNamespace _namespace, ResourceLocationPath _path);
 extern ResourceLocationNamespace getResourceLocationNamespace(ResourceLocation *ptr);
-extern ResourceLocationNamespaceLength getResourceLocationNamespaceLength(ResourceLocation *ptr);
+extern size_t getResourceLocationNamespaceLength(ResourceLocation *ptr);
 extern ResourceLocationPath getResourceLocationPath(ResourceLocation *ptr);
-extern ResourceLocationPathLength getResourceLocationPathLength(ResourceLocation *ptr);
+extern size_t getResourceLocationPathLength(ResourceLocation *ptr);
 extern ResourceLocationTotal getResourceLocationTotal(ResourceLocation *ptr);
-extern ResourceLocationTotalLength getResourceLocationTotalLength(ResourceLocation *ptr);
+extern size_t getResourceLocationTotalLength(ResourceLocation *ptr);
 extern void freeResourceLocation(ResourceLocation *ptr);

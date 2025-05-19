@@ -18,17 +18,20 @@
 */
 
 #include "litlaunch/location.h"
+#include "simple_string_lib.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 const ResourceLocationNamespace litlaunchNamespace = "litlaunch";
-const ResourceLocationNamespaceLength litlaunchNamespaceLength = 10;
 
-ResourceLocation *newResourceLocation(
-    const ResourceLocationNamespace _namespace, const ResourceLocationNamespaceLength _namespaceLength,
-    const ResourceLocationPath _path, const ResourceLocationPathLength _pathLength,
-    const ResourceLocationTotal _total, const ResourceLocationTotalLength _totalLength)
+ResourceLocation *newResourceLocation(const ResourceLocationNamespace _namespace, const ResourceLocationPath _path)
 {
+    const size_t _namespaceLength = strlen(_namespace);
+    const size_t _pathLength = strlen(_path);
+    const ResourceLocationTotal _total = concatenate(_namespace, ":", _path);
+    const size_t _totalLength = strlen(_total);
+
     ResourceLocation* ptr = malloc(sizeof(*ptr) + (_namespaceLength + _pathLength + _totalLength) * sizeof(char));
 
     ptr->_namespace = _namespace;
