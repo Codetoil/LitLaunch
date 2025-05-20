@@ -25,7 +25,7 @@ Module *initLibraryApi(void)
 {
     const ResourceLocation *versionLocation =
         newResourceLocation(litlaunchNamespace, "litlaunch_library_api_version");
-    const Version *version = newVersion(versionLocation, "0.2.3+build.1");
+    const Version *version = newVersion(versionLocation, "0.2.3+build.4");
     const ResourceLocation *moduleLocation =
         newResourceLocation(litlaunchNamespace, "litlaunch_library_api");
     const ResourceLocation *dependencyDictLocation =

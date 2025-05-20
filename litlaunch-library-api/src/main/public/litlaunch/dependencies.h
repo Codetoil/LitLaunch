@@ -55,7 +55,6 @@ typedef struct VersionStruct
 {
     const ResourceLocation *id;
     const VersionValue versionValue;
-    const size_t versionValueLength;
 } Version;
 
 typedef struct DependencyDictStruct DependencyDict;
@@ -79,8 +78,8 @@ typedef struct DependencyDictElementStruct
     const Module *dependency;
     const VersionComparator *versionComparator;
     const u_int8_t flags;
-    DependencyDictElement* next;
-    DependencyDictElement* prev;
+    DependencyDictElement* nextElement;
+    DependencyDictElement* previousElement;
 } DependencyDictElement;
 
 typedef struct DependencyDictStruct
@@ -91,16 +90,19 @@ typedef struct DependencyDictStruct
 } DependencyDict;
 
 extern Module *newModule(const ResourceLocation* id, const Version* version, const DependencyDict* dependencyDict);
-extern const char* moduleToString(const Module* ptr);
+extern char* moduleToString(const Module* ptr);
+char* internalModuleToString(const Module* ptr, const char* tabs);
 extern void freeModule(Module* ptr);
 
-extern Version *newVersion(const ResourceLocation* id, const VersionValue versionValue);
-extern const char* versionToString(const Version* ptr);
+extern Version *newVersion(const ResourceLocation* id, VersionValue versionValue);
+extern char* versionToString(const Version* ptr);
+char* internalVersionToString(const Version* ptr, const char* tab);
 extern void freeVersion(Version* ptr);
 
 extern VersionComparator *newVersionComparator(const ResourceLocation* id,
     const VersionComparatorResult (*apply)(const Version*));
-extern const char* versionComparatorToString(const VersionComparator* ptr);
+extern char* versionComparatorToString(const VersionComparator* ptr);
+char* internalVersionComparatorToString(const VersionComparator* ptr, const char* tab);
 extern void freeVersionComparator(VersionComparator* ptr);
 
 extern DependencyDict *newDependencyDict(const ResourceLocation* id);
@@ -108,6 +110,8 @@ extern DependencyDictElement *addToDependencyDict(DependencyDict* dependencyDict
     const ResourceLocation* id, const Module* module, const VersionComparator* versionComparator,
     u_int8_t flags);
 extern void removeFromDependencyDictAndFree(DependencyDict* dependencyDict, DependencyDictElement* ptr);
-extern const char* dependencyDictToString(const DependencyDict* ptr);
-extern const char* dependencyDictElementToString(const DependencyDictElement* ptr);
+extern char* dependencyDictToString(const DependencyDict* ptr);
+char* internalDependencyDictToString(const DependencyDict* ptr, const char* tab);
+extern char* dependencyDictElementToString(const DependencyDictElement* ptr);
+char* internalDependencyDictElementToString(const DependencyDictElement* ptr, const char* tab);
 extern void freeDependencyDict(DependencyDict* ptr);

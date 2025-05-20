@@ -33,15 +33,17 @@ const ResourceLocation *newResourceLocation(const ResourceLocationNamespace _nam
     const ResourceLocationTotal _total = concatenate(_namespace, ":", _path);
     const size_t _totalLength = strlen(_total);
 
-    const ResourceLocation location = {_namespace, _namespaceLength, _path, _pathLength, _total, _totalLength};
+    const ResourceLocation location = {_namespace, _path, _total};
     ResourceLocation* ptr = malloc(sizeof(*ptr) + (_namespaceLength + _pathLength + _totalLength) * sizeof(char));
     memcpy(ptr, &location, sizeof(ResourceLocation));
     return ptr;
 }
 
-const char* resourceLocationToString(const ResourceLocation *ptr)
+char* resourceLocationToString(const ResourceLocation *ptr)
 {
-    return ptr->_total;
+    char* result = malloc(strlen(ptr->_total) * sizeof(char));
+    memcpy(result, ptr->_total, strlen(ptr->_total));
+    return result;
 }
 
 void freeResourceLocation(ResourceLocation *ptr)

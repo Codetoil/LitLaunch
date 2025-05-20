@@ -29,19 +29,10 @@ extern const ResourceLocationNamespace litlaunchNamespace;
 typedef struct ResourceLocationStruct
 {
     const ResourceLocationNamespace _namespace;
-    const size_t _namespaceLength;
     const ResourceLocationPath _path;
-    const size_t _pathLength;
     const ResourceLocationTotal _total;
-    const size_t _totalLength;
 } ResourceLocation;
 
 extern const ResourceLocation *newResourceLocation(ResourceLocationNamespace _namespace, ResourceLocationPath _path);
-extern ResourceLocationNamespace getResourceLocationNamespace(const ResourceLocation *ptr);
-extern size_t getResourceLocationNamespaceLength(const ResourceLocation *ptr);
-extern ResourceLocationPath getResourceLocationPath(const ResourceLocation *ptr);
-extern size_t getResourceLocationPathLength(const ResourceLocation *ptr);
-extern ResourceLocationTotal getResourceLocationTotal(const ResourceLocation *ptr);
-extern size_t getResourceLocationTotalLength(const ResourceLocation *ptr);
-extern const char* resourceLocationToString(const ResourceLocation *ptr);
+extern char* resourceLocationToString(const ResourceLocation *ptr);
 extern void freeResourceLocation(ResourceLocation *ptr);
