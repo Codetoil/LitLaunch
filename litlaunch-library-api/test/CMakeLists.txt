@@ -3,7 +3,7 @@ set(CMAKE_C_STANDARD 90)
 
 
 find_library(LITLAUNCH_LIBRARY_API
-        NAMES litlaunch-library-api-0.2.3+build.5
+        NAMES litlaunch-library-api-0.2.3+build.6
         PATHS $ENV{BUILD_LOC}/litlaunch-library-api)
 
 if (NOT LITLAUNCH_LIBRARY_API)

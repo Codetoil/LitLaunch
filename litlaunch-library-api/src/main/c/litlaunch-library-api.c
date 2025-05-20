@@ -25,7 +25,7 @@ Module *initLibraryApi(void)
 {
     const ResourceLocation *versionLocation =
         newResourceLocation(litlaunchNamespace, "litlaunch_library_api_version");
-    const Version *version = newVersion(versionLocation, "0.2.3+build.5");
+    const Version *version = newVersion(versionLocation, "0.2.3+build.6");
     const ResourceLocation *moduleLocation =
         newResourceLocation(litlaunchNamespace, "litlaunch_library_api");
     const ResourceLocation *dependencyDictLocation =
@@ -35,10 +35,10 @@ Module *initLibraryApi(void)
 }
 
 void freeLitLaunchLibraryApi(Module* apiModule) {
-    freeResourceLocation(apiModule->version->id);
-    freeVersion(apiModule->version);
-    freeResourceLocation(apiModule->dependencyDict->id);
-    freeDependencyDict(apiModule->dependencyDict);
-    freeResourceLocation(apiModule->id);
+    freeResourceLocation((ResourceLocation*) apiModule->version->id);
+    freeVersion((Version*) apiModule->version);
+    freeResourceLocation((ResourceLocation*) apiModule->dependencyDict->id);
+    freeDependencyDict((DependencyDict*) apiModule->dependencyDict);
+    freeResourceLocation((ResourceLocation*) apiModule->id);
     freeModule(apiModule);
 }
