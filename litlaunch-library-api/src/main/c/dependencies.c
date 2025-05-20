@@ -171,8 +171,8 @@ const char* dependencyDictToString(const DependencyDict* ptr)
         "\tDependency Dict Bottom: %s\n"
         "\tDependency Dict Top: %s\n",
         resourceLocationToString(ptr->id),
-        dependencyDictElementToString(ptr->dependencyDictBottom),
-        dependencyDictElementToString(ptr->dependencyDictTop)
+        ptr->dependencyDictBottom == NULL ? "NULL" : dependencyDictElementToString(ptr->dependencyDictBottom),
+        ptr->dependencyDictTop == NULL ? "NULL" : dependencyDictElementToString(ptr->dependencyDictTop)
         );
     return result;
 }
@@ -191,8 +191,8 @@ const char* dependencyDictElementToString(const DependencyDictElement* ptr)
         moduleToString(ptr->dependency),
         versionComparatorToString(ptr->versionComparator),
         ptr->flags,
-        dependencyDictElementToString(ptr->next),
-        dependencyDictElementToString(ptr->prev)
+        ptr->next == NULL ? "NULL" : dependencyDictElementToString(ptr->next),
+        ptr->prev == NULL ? "NULL" : dependencyDictElementToString(ptr->prev)
         );
     return result;
 }
