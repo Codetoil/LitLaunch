@@ -412,7 +412,7 @@ DependencyDict *newDependencyDict(const ResourceLocation* id)
 }
 
 DependencyDictElement *addToDependencyDict(DependencyDict* dependencyDict, const ResourceLocation* id,
-    const Module* module, const VersionComparator* versionComparator, const u_int8_t flags)
+    const Module* module, const Version* version, const VersionComparator* versionComparator, const u_int8_t flags)
 {
     assert(!!dependencyDict); // Dependency Dict is NULL
     assert(!!dependencyDict->id); // ID for Dependency Dict is NULL
@@ -427,12 +427,16 @@ DependencyDictElement *addToDependencyDict(DependencyDict* dependencyDict, const
     assert(!!module->version->id); // ID for Version listed in Module for Dependency Dict Element of Dependency Dict is NULL
     assert(!!module->version->id->_namespace && !!module->version->id->_path && !!module->version->id->_total); // ID for Version listed in Module for Dependency Dict Element of Dependency Dict is Broken
     assert(!!module->version->versionValue); // VersionValue for Version listed in Module for Dependency Dict Element of Dependency Dict is Broken
+    assert(!!version); // Version for Dependency Dict Element of Dependency Dict is NULL
+    assert(!!version->id); // ID for Version for Dependency Dict Element of Dependency Dict is NULL
+    assert(!!version->id->_namespace && !!module->version->id->_path && !!module->version->id->_total); // ID for Version for Dependency Dict Element of Dependency Dict is Broken
+    assert(!!version->versionValue); // VersionValue for Version for Dependency Dict Element of Dependency Dict is Broken
     assert(!!versionComparator); // Version Comparator for Dependency Dict Element of Dependency Dict is NULL
     assert(!!versionComparator->id); // ID for Version Comparator for Dependency Dict Element of Dependency Dict is NULL
     assert(!!versionComparator->id->_namespace && !!versionComparator->id->_path && !!versionComparator->id->_total); // ID for Version Comparator for Dependency Dict Element of Dependency Dict is Broken
     assert(!!versionComparator->apply); // No comparison function for Version Comparator for Dependency Dict Element of Dependency Dict
     const DependencyDictElement dependencyDictElement =
-        {id, module, versionComparator, flags, NULL, dependencyDict->dependencyDictTop};
+        {id, module, version, versionComparator, flags, NULL, dependencyDict->dependencyDictTop};
     DependencyDictElement* ptr = malloc(sizeof(*ptr));
     if (!ptr) {
         return NULL;
@@ -598,6 +602,10 @@ char* internalDependencyDictElementToString(const DependencyDictElement* ptr, co
     assert(!!ptr->dependency->version->id->_namespace && !!ptr->dependency->version->id->_path
         && !!ptr->dependency->version->id->_total); // ID for Version listed in Module for Dependency Dict Element is Broken
     assert(!!ptr->dependency->version->versionValue); // VersionValue for Version listed in Module for Dependency Dict Element is Broken
+    assert(!!ptr->version); // Version for Dependency Dict Element is NULL
+    assert(!!ptr->version->id); // ID for Version for Dependency Dict Element is NULL
+    assert(!!ptr->version->id->_namespace && !!ptr->version->id->_path && !!ptr->version->id->_total); // ID for Version for Dependency Dict Element is Broken
+    assert(!!ptr->version->versionValue); // VersionValue for Version for Dependency Dict Element is Broken
     assert(!!ptr->versionComparator); // Version Comparator for Dependency Dict Element is NULL
     assert(!!ptr->versionComparator->id); // ID for Version Comparator for Dependency Dict Element is NULL
     assert(!!ptr->versionComparator->id->_namespace && !!ptr->versionComparator->id->_path
@@ -612,12 +620,18 @@ char* internalDependencyDictElementToString(const DependencyDictElement* ptr, co
     }
     snprintf(subTab, LENGTH_TABS + 1 + 1, "%s\t", tabs);
 
+    char* idString = resourceLocationToString(ptr->id);
+    if (!idString) {
+        free(subTab);
+        return NULL;
+    }
+    char* versionString = versionToString(ptr->version);
+    if (!versionString) {
+        free(subTab);
+        free(idString);
+        return NULL;
+    }
     if (pointerInPointerArray(ptr, ignored, ignoredLength)) {
-        char* idString = resourceLocationToString(ptr->id);
-        if (!idString) {
-            free(subTab);
-            return NULL;
-        }
         const size_t length = 1 +
         LENGTH_TABS + 19 + strlen(idString) + 1;
 
@@ -625,6 +639,7 @@ char* internalDependencyDictElementToString(const DependencyDictElement* ptr, co
         if (!result) {
             free(subTab);
             free(idString);
+            free(versionString);
             return NULL;
         }
         snprintf(result, length,
@@ -636,17 +651,13 @@ char* internalDependencyDictElementToString(const DependencyDictElement* ptr, co
         free(subTab);
         return result;
     }
-    char* idString = resourceLocationToString(ptr->id);
-    if (!idString) {
-        free(subTab);
-        return NULL;
-    }
 
     const size_t newIgnoredLength = ignoredLength + 1;
     const void** newIgnored = malloc(newIgnoredLength * sizeof(const void*));
     if (!newIgnored) {
         free(subTab);
         free(idString);
+        free(versionString);
         return NULL;
     }
     memcpy(newIgnored, ignored, ignoredLength * sizeof(const void*));
@@ -655,15 +666,17 @@ char* internalDependencyDictElementToString(const DependencyDictElement* ptr, co
     char* dependencyString = internalModuleToString(ptr->dependency, subTab, newIgnored, newIgnoredLength);
     if (!dependencyString) {
         free(subTab);
-        free(newIgnored);
         free(idString);
+        free(versionString);
+        free(newIgnored);
         return NULL;
     }
     char* versionComparatorString = internalVersionComparatorToString(ptr->versionComparator, subTab);
     if (!versionComparatorString) {
         free(subTab);
-        free(newIgnored);
         free(idString);
+        free(versionString);
+        free(newIgnored);
         free(dependencyString);
         return NULL;
     }
@@ -672,8 +685,9 @@ char* internalDependencyDictElementToString(const DependencyDictElement* ptr, co
     internalDependencyDictElementToString(ptr->nextElement, subTab, newIgnored, newIgnoredLength);
     if (!nextElementString) {
         free(subTab);
-        free(newIgnored);
         free(idString);
+        free(versionString);
+        free(newIgnored);
         free(dependencyString);
         free(versionComparatorString);
         return NULL;
@@ -684,6 +698,7 @@ char* internalDependencyDictElementToString(const DependencyDictElement* ptr, co
     if (!previousElementString) {
         free(subTab);
         free(idString);
+        free(versionString);
         free(newIgnored);
         free(dependencyString);
         free(versionComparatorString);
@@ -694,6 +709,7 @@ char* internalDependencyDictElementToString(const DependencyDictElement* ptr, co
     const size_t length = 1 +
         LENGTH_TABS + 19 + strlen(idString) + 1 +
         LENGTH_TABS + 12 + strlen(dependencyString) + 1 +
+        LENGTH_TABS + 12 + strlen(versionString) + 1 +
         LENGTH_TABS + 20 + strlen(versionComparatorString) + 1 +
         LENGTH_TABS + 7 + MAX_LENGTH_NUMBER + 1 +
         LENGTH_TABS + 14 + strlen(nextElementString) + 1 +
@@ -703,6 +719,7 @@ char* internalDependencyDictElementToString(const DependencyDictElement* ptr, co
     if (!result) {
         free(subTab);
         free(idString);
+        free(versionString);
         free(newIgnored);
         free(dependencyString);
         free(versionComparatorString);
@@ -714,12 +731,14 @@ char* internalDependencyDictElementToString(const DependencyDictElement* ptr, co
         "\n"
         "%sResource Location: %s\n"
         "%sDependency: %s\n"
+        "%sVersion: %s\n"
         "%sVersion Comparator: %s\n"
         "%sFlags: %i\n"
         "%sNext Element: %s\n"
         "%sPrevious Element: %s\n",
         tabs, idString,
         tabs, dependencyString,
+        tabs, versionString,
         tabs, versionComparatorString,
         tabs, ptr->flags,
         tabs, nextElementString,
@@ -727,6 +746,7 @@ char* internalDependencyDictElementToString(const DependencyDictElement* ptr, co
         );
     free(subTab);
     free(idString);
+    free(versionString);
     free(newIgnored);
     free(dependencyString);
     free(versionComparatorString);

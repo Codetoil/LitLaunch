@@ -77,6 +77,7 @@ typedef struct DependencyDictElementStruct
 {
     const ResourceLocation *id;
     const Module *dependency;
+    const Version *version;
     const VersionComparator *versionComparator;
     const u_int8_t flags;
     DependencyDictElement* nextElement;
@@ -116,8 +117,8 @@ extern void freeVersionComparator(VersionComparator* ptr);
 
 extern DependencyDict *newDependencyDict(const ResourceLocation* id);
 extern DependencyDictElement *addToDependencyDict(DependencyDict* dependencyDict,
-    const ResourceLocation* id, const Module* module, const VersionComparator* versionComparator,
-    u_int8_t flags);
+    const ResourceLocation* id, const Module* module, const Version* version,
+    const VersionComparator* versionComparator, u_int8_t flags);
 extern void removeFromDependencyDictAndFree(DependencyDict* dependencyDict, DependencyDictElement* ptr);
 extern char* dependencyDictToString(const DependencyDict* ptr);
 char* internalDependencyDictToString(const DependencyDict* ptr, const char* tabs,

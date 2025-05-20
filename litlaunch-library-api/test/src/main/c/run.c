@@ -17,6 +17,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+#include <assert.h>
 #include <stdio.h>
 #include "litlaunch/dependencies.h"
 #include "litlaunch/litlaunch-library-api.h"
@@ -25,7 +26,7 @@ Module *initLibraryApiTests(Module* apiModule)
 {
     const ResourceLocation *versionLocation =
         newResourceLocation(litLaunchNamespace, "litlaunch_library_api_tests_version");
-    const Version *version = newVersion(versionLocation, "0.1.1+build.1");
+    const Version *version = newVersion(versionLocation, "0.1.1+build.3");
     const ResourceLocation *moduleLocation =
         newResourceLocation(litLaunchNamespace, "litlaunch_library_api_tests");
     const ResourceLocation *dependencyDictLocation =
@@ -33,8 +34,11 @@ Module *initLibraryApiTests(Module* apiModule)
     DependencyDict *dependencyDict = newDependencyDict(dependencyDictLocation);
     const ResourceLocation *apiDependencyDictElementLocation =
         newResourceLocation(litLaunchNamespace, "litlaunch_library_api_tests_api_dependency_dict_element");
-    addToDependencyDict(dependencyDict, apiDependencyDictElementLocation, apiModule, getSemver2_0_0Comparator(),
-        0b00000000);
+    const ResourceLocation *apiVersionLocation =
+        newResourceLocation(litLaunchNamespace, "litlaunch_library_api_version");
+    const Version *apiVersion = newVersion(apiVersionLocation, "0.2.4+build.2");
+    addToDependencyDict(dependencyDict, apiDependencyDictElementLocation, apiModule,
+        apiVersion, getSemver2_0_0Comparator(), 0b00000000);
     return newModule(moduleLocation, version, dependencyDict);
 }
 
@@ -57,6 +61,12 @@ int main()
 
     Module* apiModule = initLibraryApi();
     Module* apiTestsModule = initLibraryApiTests(apiModule);
+    DependencyDictElement* i;
+    for (i = apiTestsModule->dependencyDict->dependencyDictBottom;
+        i != apiTestsModule->dependencyDict->dependencyDictTop;
+        i = i->nextElement) {
+        assert(i->versionComparator->apply(i->version, i->dependency->version) == VERSION_MATCH);
+    }
 
     printf("LitLaunch API Module: %s", moduleToString(apiModule));
     printf("LitLaunch API Tests Module: %s", moduleToString(apiTestsModule));
