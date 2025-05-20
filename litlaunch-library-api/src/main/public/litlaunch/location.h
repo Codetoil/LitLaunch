@@ -28,19 +28,20 @@ extern const ResourceLocationNamespace litlaunchNamespace;
 
 typedef struct ResourceLocationStruct
 {
-    ResourceLocationNamespace _namespace;
-    size_t _namespaceLength;
-    ResourceLocationPath _path;
-    size_t _pathLength;
-    ResourceLocationTotal _total;
-    size_t _totalLength;
+    const ResourceLocationNamespace _namespace;
+    const size_t _namespaceLength;
+    const ResourceLocationPath _path;
+    const size_t _pathLength;
+    const ResourceLocationTotal _total;
+    const size_t _totalLength;
 } ResourceLocation;
 
-extern ResourceLocation *newResourceLocation(ResourceLocationNamespace _namespace, ResourceLocationPath _path);
-extern ResourceLocationNamespace getResourceLocationNamespace(ResourceLocation *ptr);
-extern size_t getResourceLocationNamespaceLength(ResourceLocation *ptr);
-extern ResourceLocationPath getResourceLocationPath(ResourceLocation *ptr);
-extern size_t getResourceLocationPathLength(ResourceLocation *ptr);
-extern ResourceLocationTotal getResourceLocationTotal(ResourceLocation *ptr);
-extern size_t getResourceLocationTotalLength(ResourceLocation *ptr);
+extern const ResourceLocation *newResourceLocation(ResourceLocationNamespace _namespace, ResourceLocationPath _path);
+extern ResourceLocationNamespace getResourceLocationNamespace(const ResourceLocation *ptr);
+extern size_t getResourceLocationNamespaceLength(const ResourceLocation *ptr);
+extern ResourceLocationPath getResourceLocationPath(const ResourceLocation *ptr);
+extern size_t getResourceLocationPathLength(const ResourceLocation *ptr);
+extern ResourceLocationTotal getResourceLocationTotal(const ResourceLocation *ptr);
+extern size_t getResourceLocationTotalLength(const ResourceLocation *ptr);
+extern const char* resourceLocationToString(const ResourceLocation *ptr);
 extern void freeResourceLocation(ResourceLocation *ptr);

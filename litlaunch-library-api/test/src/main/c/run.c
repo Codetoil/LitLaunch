@@ -18,21 +18,10 @@
 */
 
 #include <stdio.h>
-#include "litlaunch/location.h"
 #include "litlaunch/dependencies.h"
 #include "litlaunch/litlaunch-library-api.h"
 
-void printModule(const Module* module) {
-    printf("\tResource Location: %s\n", module->id->_total);
-    printf("\tVersion:\n");
-    printf("\t\tResource Location: %s\n", module->version->id->_total);
-    printf("\t\tValue: %s\n", module->version->versionValue);
-    printf("\tDependency Dict:\n");
-    printf("\t\tResource Location: %s\n", module->dependencyDict->id->_total);
-    printf("\t\tDependency Dict Entries:\n");
-    printf("\t\t\tNOT IMPLEMENTED\n");
-    printf("\n");
-}
+
 
 int main()
 {
@@ -45,7 +34,7 @@ int main()
     Module* apiModule = initLibraryApi();
 
     printf("LitLaunch Library API Implementation:\n");
-    printModule(apiModule);
+    printf("API Module: %s", moduleToString(apiModule));
 
     freeLitLaunchLibraryApi(apiModule);
     return 0;

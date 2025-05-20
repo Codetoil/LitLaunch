@@ -25,22 +25,23 @@
 
 const ResourceLocationNamespace litlaunchNamespace = "litlaunch";
 
-ResourceLocation *newResourceLocation(const ResourceLocationNamespace _namespace, const ResourceLocationPath _path)
+const ResourceLocation *newResourceLocation(const ResourceLocationNamespace _namespace,
+                                            const ResourceLocationPath _path)
 {
     const size_t _namespaceLength = strlen(_namespace);
     const size_t _pathLength = strlen(_path);
     const ResourceLocationTotal _total = concatenate(_namespace, ":", _path);
     const size_t _totalLength = strlen(_total);
 
+    const ResourceLocation location = {_namespace, _namespaceLength, _path, _pathLength, _total, _totalLength};
     ResourceLocation* ptr = malloc(sizeof(*ptr) + (_namespaceLength + _pathLength + _totalLength) * sizeof(char));
-
-    ptr->_namespace = _namespace;
-    ptr->_namespaceLength = _namespaceLength;
-    ptr->_path = _path;
-    ptr->_pathLength = _pathLength;
-    ptr->_total = _total;
-    ptr->_totalLength = _totalLength;
+    memcpy(ptr, &location, sizeof(ResourceLocation));
     return ptr;
+}
+
+const char* resourceLocationToString(const ResourceLocation *ptr)
+{
+    return ptr->_total;
 }
 
 void freeResourceLocation(ResourceLocation *ptr)

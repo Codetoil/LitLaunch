@@ -23,14 +23,14 @@
 
 Module *initLibraryApi(void)
 {
-    ResourceLocation *versionLocation =
+    const ResourceLocation *versionLocation =
         newResourceLocation(litlaunchNamespace, "litlaunch_library_api_version");
-    Version *version = newVersion(versionLocation, "0.2.2+build.0");
-    ResourceLocation *moduleLocation =
+    const Version *version = newVersion(versionLocation, "0.2.3+build.0");
+    const ResourceLocation *moduleLocation =
         newResourceLocation(litlaunchNamespace, "litlaunch_library_api");
-    ResourceLocation *dependencyDictLocation =
+    const ResourceLocation *dependencyDictLocation =
         newResourceLocation(litlaunchNamespace, "litlaunch_library_api_dependency_dict");
-    DependencyDict *dependencyDict = newDependencyDict(dependencyDictLocation);
+    const DependencyDict *dependencyDict = newDependencyDict(dependencyDictLocation);
     return newModule(moduleLocation, version, dependencyDict);
 }
 

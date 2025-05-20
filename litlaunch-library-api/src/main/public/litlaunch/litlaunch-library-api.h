@@ -22,4 +22,4 @@
 #include "dependencies.h"
 
 extern Module *initLibraryApi(void);
-extern void freeLitLaunchLibraryApi(Module *module);
+extern void freeLitLaunchLibraryApi(Module *apiModule);

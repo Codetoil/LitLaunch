@@ -19,4 +19,20 @@
 
 #pragma once
 
-const char *concatenate(const char *a, const char *b, const char *c);
+// Code modified from: https://stackoverflow.com/a/34053991
+
+#include <stdlib.h>
+#include <string.h>
+
+inline const char *concatenate(const char *a, const char *b, const char *c) {
+      const size_t a_length = strlen(a);
+      const size_t b_length = strlen(b);
+      const size_t c_length = strlen(c);
+      char *res = malloc(a_length + b_length + c_length + 1);
+      if (res) {
+       memcpy(res, a, a_length);
+       memcpy(res + a_length, b, b_length);
+       memcpy(res + a_length + b_length, c, c_length + 1);
+      }
+      return res;
+}

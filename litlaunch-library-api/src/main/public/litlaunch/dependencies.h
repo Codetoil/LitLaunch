@@ -44,15 +44,18 @@ typedef enum EnumVersionComparatorResult
 
 typedef struct VersionStruct Version;
 
-typedef VersionComparatorResult (*VersionComparator)(const Version*);
+typedef struct VersionComparatorStruct {
+    const ResourceLocation *id;
+    const VersionComparatorResult (*apply)(const Version*);
+} VersionComparator;
 
 typedef const char* VersionValue;
 
 typedef struct VersionStruct
 {
-    ResourceLocation *id;
-    VersionValue versionValue;
-    size_t versionValueLength;
+    const ResourceLocation *id;
+    const VersionValue versionValue;
+    const size_t versionValueLength;
 } Version;
 
 typedef struct DependencyDictStruct DependencyDict;
@@ -61,40 +64,50 @@ typedef struct ModuleStruct Module;
 
 typedef struct ModuleStruct
 {
-    ResourceLocation *id;
-    Version *version;
-    DependencyDict *dependencyDict;
-    Module* next;
-    Module* prev;
+    const ResourceLocation *id;
+    const Version *version;
+    const DependencyDict *dependencyDict;
+    const Module* next;
+    const Module* prev;
 } Module;
 
 typedef struct DependencyDictElementStruct DependencyDictElement;
 
 typedef struct DependencyDictElementStruct
 {
-    ResourceLocation *id;
-    Module *dependency;
-    VersionComparator *versionComparator;
-    u_int8_t flags;
+    const ResourceLocation *id;
+    const Module *dependency;
+    const VersionComparator *versionComparator;
+    const u_int8_t flags;
     DependencyDictElement* next;
     DependencyDictElement* prev;
 } DependencyDictElement;
 
 typedef struct DependencyDictStruct
 {
-    ResourceLocation *id;
+    const ResourceLocation *id;
     DependencyDictElement *dependencyDictTop;
     DependencyDictElement *dependencyDictBottom;
 } DependencyDict;
 
-extern Module *newModule(ResourceLocation* id, Version* version, DependencyDict* dependencyDict);
+extern Module *newModule(const ResourceLocation* id, const Version* version, const DependencyDict* dependencyDict);
+extern const char* moduleToString(const Module* ptr);
 extern void freeModule(Module* ptr);
 
-extern Version *newVersion(ResourceLocation* id, VersionValue versionValue);
+extern Version *newVersion(const ResourceLocation* id, const VersionValue versionValue);
+extern const char* versionToString(const Version* ptr);
 extern void freeVersion(Version* ptr);
 
-extern DependencyDict *newDependencyDict(ResourceLocation* id);
-extern DependencyDictElement *addToDependencyDict(DependencyDict* dependencyDict, ResourceLocation* id,
-    Module* module, VersionComparator* versionComparator, u_int8_t flags);
+extern VersionComparator *newVersionComparator(const ResourceLocation* id,
+    const VersionComparatorResult (*apply)(const Version*));
+extern const char* versionComparatorToString(const VersionComparator* ptr);
+extern void freeVersionComparator(VersionComparator* ptr);
+
+extern DependencyDict *newDependencyDict(const ResourceLocation* id);
+extern DependencyDictElement *addToDependencyDict(DependencyDict* dependencyDict,
+    const ResourceLocation* id, const Module* module, const VersionComparator* versionComparator,
+    u_int8_t flags);
 extern void removeFromDependencyDictAndFree(DependencyDict* dependencyDict, DependencyDictElement* ptr);
+extern const char* dependencyDictToString(const DependencyDict* ptr);
+extern const char* dependencyDictElementToString(const DependencyDictElement* ptr);
 extern void freeDependencyDict(DependencyDict* ptr);

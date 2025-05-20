@@ -5,6 +5,7 @@
 
 #include "litlaunch/dependencies.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -12,39 +13,33 @@
 Module *moduleRegistryTop = NULL;
 Module *moduleRegistryBottom = NULL;
 
-Version *newVersion(ResourceLocation* id, const VersionValue versionValue)
+Module *newModule(const ResourceLocation* id, const Version* version, const DependencyDict* dependencyDict)
 {
-    const size_t versionValueLength = strlen(versionValue);
-    Version* versionStruct = malloc(sizeof(*versionStruct) + versionValueLength);
-    versionStruct->id = id;
-    versionStruct->versionValue = versionValue;
-    versionStruct->versionValueLength = versionValueLength;
-    return versionStruct;
-}
-
-void freeVersion(Version* ptr)
-{
-    free(ptr);
-}
-
-Module *newModule(ResourceLocation* id, Version* version, DependencyDict* dependencyDict)
-{
-    Module* module = malloc(sizeof(*module));
-    module->id = id;
-    module->version = version;
-    module->dependencyDict = dependencyDict;
-    module->next = NULL;
-    module->prev = moduleRegistryTop;
+    const Module module = {id, version, dependencyDict, NULL, moduleRegistryTop};
+    Module* ptr = malloc(sizeof(*ptr));
+    memcpy(ptr, &module, sizeof(Module));
     if (!moduleRegistryBottom)
     {
-        moduleRegistryBottom = module;
+        moduleRegistryBottom = ptr;
     }
     if (moduleRegistryTop)
     {
-        moduleRegistryTop->next = module;
+        moduleRegistryTop->next = ptr;
     }
-    moduleRegistryTop = module;
-    return module;
+    moduleRegistryTop = ptr;
+    return ptr;
+}
+
+const char* moduleToString(const Module* ptr)
+{
+    char* result = malloc(1000 * sizeof(char));
+    snprintf(result, 1000,
+        "\tResource Location: %s\n"
+        "\tVersion: %s\n"
+        "\tDependency Dict: %s\n",
+        resourceLocationToString(ptr->id), versionToString(ptr->version),
+        dependencyDictToString(ptr->dependencyDict));
+    return result;
 }
 
 void freeModule(Module* ptr)
@@ -70,35 +65,79 @@ void freeModule(Module* ptr)
     free(ptr);
 }
 
-DependencyDict *newDependencyDict(ResourceLocation* id)
+Version *newVersion(const ResourceLocation* id, const VersionValue versionValue)
 {
-    DependencyDict* dependencyDict = malloc(sizeof(*dependencyDict));
-    dependencyDict->id = id;
-    dependencyDict->dependencyDictBottom = NULL;
-    dependencyDict->dependencyDictTop = NULL;
-    return dependencyDict;
+    const size_t versionValueLength = strlen(versionValue);
+    const Version version = {id, versionValue, versionValueLength};
+    Version* ptr = malloc(sizeof(*ptr) + versionValueLength);
+    memcpy(ptr, &version, sizeof(Version));
+    return ptr;
 }
 
-DependencyDictElement *addToDependencyDict(DependencyDict* dependencyDict,
-    ResourceLocation* id, Module* module, VersionComparator* versionComparator, const u_int8_t flags)
+const char* versionToString(const Version* ptr)
 {
-    DependencyDictElement* dependencyDictElement = malloc(sizeof(*dependencyDictElement));
-    dependencyDictElement->id = id;
-    dependencyDictElement->dependency = module;
-    dependencyDictElement->versionComparator = versionComparator;
-    dependencyDictElement->flags = flags;
-    dependencyDictElement->next = NULL;
-    dependencyDictElement->prev = dependencyDict->dependencyDictTop;
+    char* result = malloc(1000 * sizeof(char));
+    snprintf(result, 1000,
+        "\tResource Location: %s\n"
+        "\tVersionValue: %s\n"
+        "\tVersion Value Length: %lu\n",
+        resourceLocationToString(ptr->id), ptr->versionValue, ptr->versionValueLength);
+    return result;
+}
+
+void freeVersion(Version* ptr)
+{
+    free(ptr);
+}
+
+VersionComparator *newVersionComparator(const ResourceLocation* id,
+    const VersionComparatorResult (*apply)(const Version*))
+{
+    const VersionComparator versionComparator = {id, apply};
+    VersionComparator* ptr = malloc(sizeof(*ptr));
+    memcpy(ptr, &versionComparator, sizeof(VersionComparator));
+    return ptr;
+}
+
+const char* versionComparatorToString(const VersionComparator* ptr)
+{
+    char* result = malloc(1000 * sizeof(char));
+    snprintf(result, 1000,
+        "\tResource Location: %s\n",
+        resourceLocationToString(ptr->id));
+    return result;
+}
+
+void freeVersionComparator(VersionComparator* ptr)
+{
+    free(ptr);
+}
+
+DependencyDict *newDependencyDict(const ResourceLocation* id)
+{
+    const DependencyDict dependencyDict = {id, NULL, NULL};
+    DependencyDict* ptr = malloc(sizeof(*ptr));
+    memcpy(ptr, &dependencyDict, sizeof(DependencyDict));
+    return ptr;
+}
+
+DependencyDictElement *addToDependencyDict(DependencyDict* dependencyDict, const ResourceLocation* id,
+    const Module* module, const VersionComparator* versionComparator, const u_int8_t flags)
+{
+    const DependencyDictElement dependencyDictElement =
+        {id, module, versionComparator, flags, NULL, dependencyDict->dependencyDictTop};
+    DependencyDictElement* ptr = malloc(sizeof(*ptr));
+    memcpy(ptr, &dependencyDictElement, sizeof(DependencyDictElement));
     if (!dependencyDict->dependencyDictBottom)
     {
-        dependencyDict->dependencyDictBottom = dependencyDictElement;
+        dependencyDict->dependencyDictBottom = ptr;
     }
     if (dependencyDict->dependencyDictTop)
     {
-        dependencyDict->dependencyDictTop->next = dependencyDictElement;
+        dependencyDict->dependencyDictTop->next = ptr;
     }
-    dependencyDict->dependencyDictTop = dependencyDictElement;
-    return dependencyDictElement;
+    dependencyDict->dependencyDictTop = ptr;
+    return ptr;
 }
 
 void removeFromDependencyDictAndFree(DependencyDict* dependencyDict, DependencyDictElement* ptr)
@@ -122,6 +161,40 @@ void removeFromDependencyDictAndFree(DependencyDict* dependencyDict, DependencyD
         dependencyDict->dependencyDictTop = prev;
     }
     free(ptr);
+}
+
+const char* dependencyDictToString(const DependencyDict* ptr)
+{
+    char* result = malloc(1000);
+    snprintf(result, 1000,
+        "\tResource Location: %s\n"
+        "\tDependency Dict Bottom: %s\n"
+        "\tDependency Dict Top: %s\n",
+        resourceLocationToString(ptr->id),
+        dependencyDictElementToString(ptr->dependencyDictBottom),
+        dependencyDictElementToString(ptr->dependencyDictTop)
+        );
+    return result;
+}
+
+const char* dependencyDictElementToString(const DependencyDictElement* ptr)
+{
+    char* result = malloc(1000);
+    snprintf(result, 1000,
+        "\tResource Location: %s\n"
+        "\tDependency: %s\n"
+        "\tVersion Comparitor: %s\n"
+        "\tFlags: %i\n"
+        "\tNext: %s\n"
+        "\tPrevious: %s\n",
+        resourceLocationToString(ptr->id),
+        moduleToString(ptr->dependency),
+        versionComparatorToString(ptr->versionComparator),
+        ptr->flags,
+        dependencyDictElementToString(ptr->next),
+        dependencyDictElementToString(ptr->prev)
+        );
+    return result;
 }
 
 void freeDependencyDict(DependencyDict* ptr)
