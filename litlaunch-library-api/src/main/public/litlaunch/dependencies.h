@@ -91,18 +91,19 @@ typedef struct DependencyDictStruct
 
 extern Module *newModule(const ResourceLocation* id, const Version* version, const DependencyDict* dependencyDict);
 extern char* moduleToString(const Module* ptr);
-char* internalModuleToString(const Module* ptr, const char* tabs);
+char* internalModuleToString(const Module* ptr, const char* tabs,
+    const void** ignored, size_t ignoredLength);
 extern void freeModule(Module* ptr);
 
 extern Version *newVersion(const ResourceLocation* id, VersionValue versionValue);
 extern char* versionToString(const Version* ptr);
-char* internalVersionToString(const Version* ptr, const char* tab);
+char* internalVersionToString(const Version* ptr, const char* tabs);
 extern void freeVersion(Version* ptr);
 
 extern VersionComparator *newVersionComparator(const ResourceLocation* id,
     const VersionComparatorResult (*apply)(const Version*));
 extern char* versionComparatorToString(const VersionComparator* ptr);
-char* internalVersionComparatorToString(const VersionComparator* ptr, const char* tab);
+char* internalVersionComparatorToString(const VersionComparator* ptr, const char* tabs);
 extern void freeVersionComparator(VersionComparator* ptr);
 
 extern DependencyDict *newDependencyDict(const ResourceLocation* id);
@@ -111,7 +112,9 @@ extern DependencyDictElement *addToDependencyDict(DependencyDict* dependencyDict
     u_int8_t flags);
 extern void removeFromDependencyDictAndFree(DependencyDict* dependencyDict, DependencyDictElement* ptr);
 extern char* dependencyDictToString(const DependencyDict* ptr);
-char* internalDependencyDictToString(const DependencyDict* ptr, const char* tab);
+char* internalDependencyDictToString(const DependencyDict* ptr, const char* tabs,
+    const void** ignored, size_t ignoredLength);
 extern char* dependencyDictElementToString(const DependencyDictElement* ptr);
-char* internalDependencyDictElementToString(const DependencyDictElement* ptr, const char* tab);
+char* internalDependencyDictElementToString(const DependencyDictElement* ptr, const char* tabs,
+    const void** ignored, size_t ignoredLength);
 extern void freeDependencyDict(DependencyDict* ptr);

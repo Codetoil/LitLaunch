@@ -1,10 +1,9 @@
 cmake_minimum_required(VERSION 3.15)
-project(litlaunch-library-api VERSION 0.2.3.4 LANGUAGES C)
+project(litlaunch-library-api VERSION 0.2.3.5 LANGUAGES C)
 
 set(CMAKE_C_STANDARD 90)
 
 add_library(litlaunch-library-api STATIC
-        src/main/c/simple_string_lib.h
         src/main/c/location.c
         src/main/public/litlaunch/location.h
         src/main/c/dependencies.c
@@ -15,7 +14,7 @@ add_library(litlaunch-library-api STATIC
 set_target_properties(
         litlaunch-library-api
         PROPERTIES
-            OUTPUT_NAME "litlaunch-library-api-0.2.3+build.4"
+            OUTPUT_NAME "litlaunch-library-api-0.2.3+build.5"
 )
 
 target_include_directories(litlaunch-library-api PUBLIC include src/main/public)

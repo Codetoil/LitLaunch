@@ -21,8 +21,6 @@
 #include "litlaunch/dependencies.h"
 #include "litlaunch/litlaunch-library-api.h"
 
-
-
 int main()
 {
     printf("DYNAMIC_DEP: %i\n", DYNAMIC_DEP);
