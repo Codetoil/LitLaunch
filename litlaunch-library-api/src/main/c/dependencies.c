@@ -21,6 +21,16 @@ const size_t LENGTH_TAB = strlen("\t");
 Module *moduleRegistryTop = NULL;
 Module *moduleRegistryBottom = NULL;
 
+bool pointerInPointerArray(const void* val, const void **arr, const size_t size) {
+    if (arr == NULL) return false;
+    size_t i;
+    for(i = 0; i < size / sizeof(*arr); i++) {
+        if(arr[i] == val)
+            return true;
+    }
+    return false;
+}
+
 Module *newModule(const ResourceLocation* id, const Version* version, const DependencyDict* dependencyDict)
 {
     assert(!!id); // ID for Module is NULL ;
@@ -63,65 +73,82 @@ char* internalModuleToString(const Module* ptr, const char* tabs,
     }
     snprintf(subTab, LENGTH_TABS + LENGTH_TAB + 1, "%s\t", tabs);
 
+    char* idString = resourceLocationToString(ptr->id);
+    if (!idString) {
+        free(subTab);
+        return NULL;
+    }
+    if (pointerInPointerArray(ptr, ignored, ignoredLength)) {
+        const size_t length = LENGTH_NEWLINE +
+            LENGTH_TABS + 19 + strlen(idString) + LENGTH_NEWLINE;
+
+        char* result = malloc(length * sizeof(char));
+        if (!result) {
+            free(subTab);
+            free(idString);
+            return NULL;
+        }
+        snprintf(result, length,
+            "\n"
+            "%sResource Location: %s\n",
+            tabs, idString);
+        free(idString);
+        free(subTab);
+        return result;
+    }
     const size_t newIgnoredLength = ignoredLength + 1;
     const void** newIgnored = malloc(newIgnoredLength * sizeof(const void*));
     if (!newIgnored) {
         free(subTab);
+        free(idString);
         return NULL;
     }
     memcpy(newIgnored, ignored, ignoredLength * sizeof(const void*));
     newIgnored[ignoredLength] = ptr;
-
-    char* idString = resourceLocationToString(ptr->id);
-    if (!idString) {
-        free(subTab);
-        free(newIgnored);
-        return NULL;
-    }
     char* versionString = internalVersionToString(ptr->version, subTab);
     if (!versionString) {
         free(subTab);
-        free(newIgnored);
         free(idString);
+        free(newIgnored);
         return NULL;
     }
     char* dependencyDictString = internalDependencyDictToString(ptr->dependencyDict, subTab,
-        newIgnored, newIgnoredLength);
+                                                                newIgnored, newIgnoredLength);
     if (!dependencyDictString) {
         free(subTab);
-        free(newIgnored);
         free(idString);
+        free(newIgnored);
         free(versionString);
         return NULL;
     }
 
     const size_t length = LENGTH_NEWLINE +
-        LENGTH_TABS + 19 + strlen(idString) + LENGTH_NEWLINE +
-        LENGTH_TABS + 9 + strlen(versionString) + LENGTH_NEWLINE +
-        LENGTH_TABS + 17 * strlen(dependencyDictString) + LENGTH_NEWLINE;
+                          LENGTH_TABS + 19 + strlen(idString) + LENGTH_NEWLINE +
+                          LENGTH_TABS + 9 + strlen(versionString) + LENGTH_NEWLINE +
+                          LENGTH_TABS + 17 * strlen(dependencyDictString) + LENGTH_NEWLINE;
 
     char* result = malloc(length * sizeof(char));
     if (!result) {
         free(subTab);
-        free(newIgnored);
         free(idString);
+        free(newIgnored);
         free(versionString);
         free(dependencyDictString);
         return NULL;
     }
     snprintf(result, length,
-        "\n"
-        "%sResource Location: %s\n"
-        "%sVersion: %s\n"
-        "%sDependency Dict: %s\n",
-        tabs, idString,
-        tabs, versionString,
-        tabs, dependencyDictString);
-    free(newIgnored);
+             "\n"
+             "%sResource Location: %s\n"
+             "%sVersion: %s\n"
+             "%sDependency Dict: %s\n",
+             tabs, idString,
+             tabs, versionString,
+             tabs, dependencyDictString);
+    free(subTab);
     free(idString);
+    free(newIgnored);
     free(versionString);
     free(dependencyDictString);
-    free(subTab);
     return result;
 }
 
@@ -354,21 +381,39 @@ char* internalDependencyDictToString(const DependencyDict* ptr, const char* tabs
     if (!subTab) return NULL;
     snprintf(subTab, LENGTH_TABS + LENGTH_TAB + 1, "%s\t", tabs);
 
+    char* idString = resourceLocationToString(ptr->id);
+    if (!idString) {
+        free(subTab);
+        return NULL;
+    }
+    if (pointerInPointerArray(ptr, ignored, ignoredLength)) {
+        const size_t length = LENGTH_NEWLINE +
+        LENGTH_TABS + 19 + strlen(idString) + LENGTH_NEWLINE;
+
+        char* result = malloc(length * sizeof(char));
+        if (!result) {
+            free(subTab);
+            free(idString);
+            return NULL;
+        }
+        snprintf(result, length,
+            "\n"
+            "%sResource Location: %s\n",
+            tabs, idString
+            );
+        free(idString);
+        free(subTab);
+        return result;
+    }
     const size_t newIgnoredLength = ignoredLength + 1;
     const void** newIgnored = malloc(newIgnoredLength * sizeof(const void*));
     if (!newIgnored) {
         free(subTab);
+        free(idString);
         return NULL;
     }
     memcpy(newIgnored, ignored, ignoredLength * sizeof(const void*));
     newIgnored[ignoredLength] = ptr;
-
-    char* idString = resourceLocationToString(ptr->id);
-    if (!idString) {
-        free(subTab);
-        free(newIgnored);
-        return NULL;
-    }
 
     const bool dependencyDictBottomNull = ptr->dependencyDictBottom == NULL;
     char* dependencyDictBottomString =
@@ -376,8 +421,8 @@ char* internalDependencyDictToString(const DependencyDict* ptr, const char* tabs
             internalDependencyDictElementToString(ptr->dependencyDictBottom, subTab, newIgnored, newIgnoredLength);
     if (!dependencyDictBottomString) {
         free(subTab);
-        free(newIgnored);
         free(idString);
+        free(newIgnored);
         return NULL;
     }
     const bool dependencyDictTopNull = ptr->dependencyDictTop == NULL;
@@ -386,8 +431,8 @@ char* internalDependencyDictToString(const DependencyDict* ptr, const char* tabs
             internalDependencyDictElementToString(ptr->dependencyDictTop, subTab, newIgnored, newIgnoredLength);
     if (!dependencyDictTopString) {
         free(subTab);
-        free(newIgnored);
         free(idString);
+        free(newIgnored);
         free(dependencyDictBottomString);
         return NULL;
     }
@@ -400,8 +445,8 @@ char* internalDependencyDictToString(const DependencyDict* ptr, const char* tabs
     char* result = malloc(length * sizeof(char));
     if (!result) {
         free(subTab);
-        free(newIgnored);
         free(idString);
+        free(newIgnored);
         free(dependencyDictBottomString);
         free(dependencyDictTopString);
         return NULL;
@@ -415,13 +460,13 @@ char* internalDependencyDictToString(const DependencyDict* ptr, const char* tabs
         tabs, dependencyDictBottomString,
         tabs, dependencyDictTopString
         );
+    free(subTab);
     free(idString);
+    free(newIgnored);
     if (!dependencyDictBottomNull)
         free(dependencyDictBottomString);
     if (!dependencyDictTopNull)
         free(dependencyDictTopString);
-    free(newIgnored);
-    free(subTab);
     return result;
 }
 
@@ -459,21 +504,46 @@ char* internalDependencyDictElementToString(const DependencyDictElement* ptr, co
     }
     snprintf(subTab, LENGTH_TABS + LENGTH_TAB + 1, "%s\t", tabs);
 
+    if (pointerInPointerArray(ptr, ignored, ignoredLength)) {
+        char* idString = resourceLocationToString(ptr->id);
+        if (!idString) {
+            free(subTab);
+            return NULL;
+        }
+        const size_t length = LENGTH_NEWLINE +
+        LENGTH_TABS + 19 + strlen(idString) + LENGTH_NEWLINE;
+
+        char* result = malloc(length * sizeof(char));
+        if (!result) {
+            free(subTab);
+            free(idString);
+            return NULL;
+        }
+        snprintf(result, length,
+            "\n"
+            "%sResource Location: %s\n",
+            tabs, idString
+            );
+        free(idString);
+        free(subTab);
+        return result;
+    }
+    char* idString = resourceLocationToString(ptr->id);
+    if (!idString) {
+        free(subTab);
+        return NULL;
+    }
+
     const size_t newIgnoredLength = ignoredLength + 1;
     const void** newIgnored = malloc(newIgnoredLength * sizeof(const void*));
     if (!newIgnored) {
         free(subTab);
+        free(idString);
         return NULL;
     }
     memcpy(newIgnored, ignored, ignoredLength * sizeof(const void*));
     newIgnored[ignoredLength] = ptr;
 
-    char* idString = resourceLocationToString(ptr->id);
-    if (!idString) {
-        free(subTab);
-        free(newIgnored);
-        return NULL;
-    }
     char* dependencyString = internalModuleToString(ptr->dependency, subTab, newIgnored, newIgnoredLength);
     if (!dependencyString) {
         free(subTab);
@@ -505,8 +575,8 @@ char* internalDependencyDictElementToString(const DependencyDictElement* ptr, co
     internalDependencyDictElementToString(ptr->previousElement, subTab, newIgnored, newIgnoredLength);
     if (!previousElementString) {
         free(subTab);
-        free(newIgnored);
         free(idString);
+        free(newIgnored);
         free(dependencyString);
         free(versionComparatorString);
         free(nextElementString);
@@ -524,8 +594,8 @@ char* internalDependencyDictElementToString(const DependencyDictElement* ptr, co
     char* result = malloc(length * sizeof(char));
     if (!result) {
         free(subTab);
-        free(newIgnored);
         free(idString);
+        free(newIgnored);
         free(dependencyString);
         free(versionComparatorString);
         free(nextElementString);
@@ -547,15 +617,15 @@ char* internalDependencyDictElementToString(const DependencyDictElement* ptr, co
         tabs, nextElementString,
         tabs, previousElementString
         );
-    free(newIgnored);
+    free(subTab);
     free(idString);
+    free(newIgnored);
     free(dependencyString);
     free(versionComparatorString);
     if (!nextElementNull)
         free(nextElementString);
     if (!previousElementNull)
         free(previousElementString);
-    free(subTab);
     return result;
 }
 
