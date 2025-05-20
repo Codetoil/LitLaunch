@@ -21,6 +21,32 @@
 #include "litlaunch/dependencies.h"
 #include "litlaunch/litlaunch-library-api.h"
 
+Module *initLibraryApiTests(Module* apiModule)
+{
+    const ResourceLocation *versionLocation =
+        newResourceLocation(litlaunchNamespace, "litlaunch_library_api_tests_version");
+    const Version *version = newVersion(versionLocation, "0.1.1+build.1");
+    const ResourceLocation *moduleLocation =
+        newResourceLocation(litlaunchNamespace, "litlaunch_library_api_tests");
+    const ResourceLocation *dependencyDictLocation =
+        newResourceLocation(litlaunchNamespace, "litlaunch_library_api_tests_dependency_dict");
+    DependencyDict *dependencyDict = newDependencyDict(dependencyDictLocation);
+    const ResourceLocation *apiDependencyDictElementLocation =
+        newResourceLocation(litlaunchNamespace, "litlaunch_library_api_tests_api_dependency_dict_element");
+    addToDependencyDict(dependencyDict, apiDependencyDictElementLocation, apiModule, getSemver2_0_0Comparator(),
+        0b00000000);
+    return newModule(moduleLocation, version, dependencyDict);
+}
+
+void freeLibraryApiTests(Module* apiTestsModule) {
+    freeResourceLocation((ResourceLocation*) apiTestsModule->version->id);
+    freeVersion((Version*) apiTestsModule->version);
+    freeResourceLocation((ResourceLocation*) apiTestsModule->dependencyDict->id);
+    freeDependencyDict((DependencyDict*) apiTestsModule->dependencyDict);
+    freeResourceLocation((ResourceLocation*) apiTestsModule->id);
+    freeModule(apiTestsModule);
+}
+
 int main()
 {
     printf("DYNAMIC_DEP: %i\n", DYNAMIC_DEP);
@@ -30,10 +56,12 @@ int main()
     printf("REQUIRED_DEP: %i\n\n", REQUIRED_DEP);
 
     Module* apiModule = initLibraryApi();
+    Module* apiTestsModule = initLibraryApiTests(apiModule);
 
-    printf("LitLaunch Library API Implementation:\n");
-    printf("API Module: %s", moduleToString(apiModule));
+    printf("LitLaunch API Module: %s", moduleToString(apiModule));
+    printf("LitLaunch API Tests Module: %s", moduleToString(apiTestsModule));
 
+    freeLibraryApiTests(apiTestsModule);
     freeLitLaunchLibraryApi(apiModule);
     return 0;
 }

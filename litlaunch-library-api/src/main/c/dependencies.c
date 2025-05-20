@@ -1,7 +1,23 @@
-//
-// Created by codetoil on 5/19/25.
-//
+/*
+* Copyright (C) 2019-2025 Anthony Michalek
+ * Contact me on Discord: @codetoil, or by Email: ianthisawesomee@gmail.com
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+*/
 
+#include "c_semver.h"
 
 #include "litlaunch/location.h"
 #include "litlaunch/dependencies.h"
@@ -17,9 +33,102 @@ const size_t MAX_LENGTH_NUMBER = (CHAR_BIT * sizeof(int) - 1) / 3 + 2;
 const size_t LENGTH_NEWLINE = strlen("\n");
 const size_t LENGTH_TAB = strlen("\t");
 
+ResourceLocation* SEMVER2_0_0_LOCATION;
+VersionComparator* SEMVER2_0_0_COMPARATOR;
+
 // New entries are added to the top of the list
 Module *moduleRegistryTop = NULL;
 Module *moduleRegistryBottom = NULL;
+
+VersionComparatorResult comparePrereleases(const char* inputPrerelease, const char* comparisonPrerelease,
+    const size_t inputPrereleaseLength, const size_t comparisonPrereleaseLength) {
+    VersionComparatorResult result = VERSION_INVALID;
+    size_t i;
+    for (i = 0;
+        i < (inputPrereleaseLength < comparisonPrereleaseLength ?
+            inputPrereleaseLength : comparisonPrereleaseLength); i++) {
+        const char inputPrereleaseChar = inputPrerelease[i];
+        const char comparisonPrereleaseChar = comparisonPrerelease[i];
+        if (inputPrereleaseChar < comparisonPrereleaseChar) {
+            result = VERSION_TOO_OLD;
+        } else if (inputPrereleaseChar > comparisonPrereleaseChar) {
+            result = VERSION_TOO_NEW;
+        }
+    }
+    if (result == VERSION_INVALID) {
+        if (inputPrereleaseLength < comparisonPrereleaseLength) {
+            result = VERSION_TOO_OLD;
+        } else if (inputPrereleaseLength > comparisonPrereleaseLength) {
+            result = VERSION_TOO_NEW;
+        } else {
+            result = VERSION_MATCH;
+        }
+    }
+    return result;
+}
+
+const VersionComparatorResult semver2_0_0Apply(const Version* input, const Version* comparison) {
+    struct semver_context contextInput;
+    struct semver_context contextComparison;
+    VersionComparatorResult result;
+    semver_init(&contextInput, input->versionValue);
+    semver_init(&contextComparison, comparison->versionValue);
+    if (semver_parse(&contextInput) != SEMVER_PARSE_OK || semver_parse(&contextComparison) != SEMVER_PARSE_OK) {
+        result = VERSION_INVALID;
+    } else {
+        if (contextInput.major < contextComparison.major) {
+            result = VERSION_TOO_OLD;
+        } else if (contextInput.major > contextComparison.major) {
+            result = VERSION_TOO_NEW;
+        } else {
+            if (contextInput.minor < contextComparison.minor) {
+                result = VERSION_TOO_OLD;
+            } else if (contextInput.minor > contextComparison.minor) {
+                result = VERSION_TOO_NEW;
+            } else {
+                if (contextInput.patch < contextComparison.patch) {
+                    result = VERSION_TOO_OLD;
+                } else if (contextInput.patch > contextComparison.patch) {
+                    result = VERSION_TOO_NEW;
+                } else {
+                    if (contextInput.is_prerelease) {
+                        if (contextComparison.is_prerelease) {
+                            result = comparePrereleases(contextInput.prerelease,
+                                contextComparison.prerelease,
+                                contextInput.prerelease_size,
+                                contextComparison.prerelease_size);
+                        } else {
+                            result = VERSION_TOO_OLD;
+                        }
+                    } else {
+                        if (contextComparison.is_prerelease) {
+                            result = VERSION_TOO_NEW;
+                        } else {
+                            result = VERSION_MATCH;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    semver_free(&contextInput);
+    semver_free(&contextComparison);
+    return result;
+}
+
+const VersionComparator* getSemver2_0_0Comparator() {
+    return SEMVER2_0_0_COMPARATOR;
+}
+
+void initVersionComparators() {
+    SEMVER2_0_0_LOCATION = (ResourceLocation*) newResourceLocation(litlaunchNamespace, "semver2_0_0_location");
+    SEMVER2_0_0_COMPARATOR = newVersionComparator(SEMVER2_0_0_LOCATION, &semver2_0_0Apply);
+}
+
+void freeVersionComparators() {
+    freeResourceLocation(SEMVER2_0_0_LOCATION);
+    freeVersionComparator(SEMVER2_0_0_COMPARATOR);
+}
 
 bool pointerInPointerArray(const void* val, const void **arr, const size_t size) {
     if (arr == NULL) return false;
@@ -238,7 +347,7 @@ void freeVersion(Version* ptr)
 }
 
 VersionComparator *newVersionComparator(const ResourceLocation* id,
-    const VersionComparatorResult (*apply)(const Version*))
+    const VersionComparatorResult (apply)(const Version*, const Version*))
 {
     assert(!!id); // ID for Version Comparator is NULL
     assert(!!id->_namespace && !!id->_path && !!id->_total); // ID for Version Comparator is Broken

@@ -37,16 +37,17 @@ typedef enum EnumDependencyRequirement
 
 typedef enum EnumVersionComparatorResult
 {
-    TOO_OLD = -1,
-    JUST_RIGHT = 0,
-    TOO_NEW = 1
+    VERSION_TOO_OLD = -1,
+    VERSION_MATCH = 0,
+    VERSION_TOO_NEW = 1,
+    VERSION_INVALID = 2
 } VersionComparatorResult;
 
 typedef struct VersionStruct Version;
 
 typedef struct VersionComparatorStruct {
     const ResourceLocation *id;
-    const VersionComparatorResult (*apply)(const Version*);
+    const VersionComparatorResult (*apply)(const Version*, const Version*);
 } VersionComparator;
 
 typedef const char* VersionValue;
@@ -89,6 +90,13 @@ typedef struct DependencyDictStruct
     DependencyDictElement *dependencyDictBottom;
 } DependencyDict;
 
+VersionComparatorResult comparePrereleases(const char* inputPrerelease, const char* comparisonPrerelease,
+    size_t inputPrereleaseLength, size_t comparisonPrereleaseLength);
+const VersionComparatorResult semver2_0_0Apply(const Version* input, const Version* comparison);
+extern const VersionComparator* getSemver2_0_0Comparator();
+void initVersionComparators();
+void freeVersionComparators();
+
 extern Module *newModule(const ResourceLocation* id, const Version* version, const DependencyDict* dependencyDict);
 extern char* moduleToString(const Module* ptr);
 char* internalModuleToString(const Module* ptr, const char* tabs,
@@ -101,7 +109,7 @@ char* internalVersionToString(const Version* ptr, const char* tabs);
 extern void freeVersion(Version* ptr);
 
 extern VersionComparator *newVersionComparator(const ResourceLocation* id,
-    const VersionComparatorResult (*apply)(const Version*));
+    const VersionComparatorResult (apply)(const Version*, const Version*));
 extern char* versionComparatorToString(const VersionComparator* ptr);
 char* internalVersionComparatorToString(const VersionComparator* ptr, const char* tabs);
 extern void freeVersionComparator(VersionComparator* ptr);

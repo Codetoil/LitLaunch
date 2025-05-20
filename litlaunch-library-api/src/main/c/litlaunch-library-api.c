@@ -23,6 +23,7 @@
 
 Module *initLibraryApi(void)
 {
+    initVersionComparators();
     const ResourceLocation *versionLocation =
         newResourceLocation(litlaunchNamespace, "litlaunch_library_api_version");
     const Version *version = newVersion(versionLocation, "0.2.3+build.6");
@@ -35,6 +36,7 @@ Module *initLibraryApi(void)
 }
 
 void freeLitLaunchLibraryApi(Module* apiModule) {
+    freeVersionComparators();
     freeResourceLocation((ResourceLocation*) apiModule->version->id);
     freeVersion((Version*) apiModule->version);
     freeResourceLocation((ResourceLocation*) apiModule->dependencyDict->id);
