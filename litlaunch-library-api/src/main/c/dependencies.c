@@ -30,8 +30,6 @@
 #include <string.h>
 
 const size_t MAX_LENGTH_NUMBER = (CHAR_BIT * sizeof(int) - 1) / 3 + 2;
-const size_t LENGTH_NEWLINE = strlen("\n");
-const size_t LENGTH_TAB = strlen("\t");
 
 ResourceLocation* SEMVER2_0_0_LOCATION;
 VersionComparator* SEMVER2_0_0_COMPARATOR;
@@ -67,7 +65,7 @@ VersionComparatorResult comparePrereleases(const char* inputPrerelease, const ch
     return result;
 }
 
-const VersionComparatorResult semver2_0_0Apply(const Version* input, const Version* comparison) {
+VersionComparatorResult semver2_0_0Apply(const Version* input, const Version* comparison) {
     struct semver_context contextInput;
     struct semver_context contextComparison;
     VersionComparatorResult result;
@@ -121,7 +119,7 @@ const VersionComparator* getSemver2_0_0Comparator() {
 }
 
 void initVersionComparators() {
-    SEMVER2_0_0_LOCATION = (ResourceLocation*) newResourceLocation(litlaunchNamespace, "semver2_0_0_location");
+    SEMVER2_0_0_LOCATION = (ResourceLocation*) newResourceLocation(litLaunchNamespace, "semver2_0_0_location");
     SEMVER2_0_0_COMPARATOR = newVersionComparator(SEMVER2_0_0_LOCATION, &semver2_0_0Apply);
 }
 
@@ -176,11 +174,11 @@ char* internalModuleToString(const Module* ptr, const char* tabs,
     assert(!!ptr->id->_namespace && !!ptr->id->_path && !!ptr->id->_total); // Module ID is Broken
     assert(!!tabs); // Tabs for Module is NULL
     const size_t LENGTH_TABS = strlen(tabs);
-    char* subTab = malloc((LENGTH_TABS + LENGTH_TAB) * sizeof(char));
+    char* subTab = malloc((LENGTH_TABS + 1 + 1) * sizeof(char));
     if (!subTab) {
         return NULL;
     }
-    snprintf(subTab, LENGTH_TABS + LENGTH_TAB + 1, "%s\t", tabs);
+    snprintf(subTab, LENGTH_TABS + 1 + 1, "%s\t", tabs);
 
     char* idString = resourceLocationToString(ptr->id);
     if (!idString) {
@@ -188,18 +186,19 @@ char* internalModuleToString(const Module* ptr, const char* tabs,
         return NULL;
     }
     if (pointerInPointerArray(ptr, ignored, ignoredLength)) {
-        const size_t length = LENGTH_NEWLINE +
-            LENGTH_TABS + 19 + strlen(idString) + LENGTH_NEWLINE;
+        const size_t length = 1 +
+            LENGTH_TABS + 19 + strlen(idString) + 1;
 
-        char* result = malloc(length * sizeof(char));
+        char* result = malloc((length + 1) * sizeof(char));
         if (!result) {
             free(subTab);
             free(idString);
             return NULL;
         }
-        snprintf(result, length,
+        snprintf(result, length + 1,
             "\n"
-            "%sResource Location: %s\n",
+            "%sResource Location: %s\n"
+            "\0",
             tabs, idString);
         free(idString);
         free(subTab);
@@ -231,12 +230,12 @@ char* internalModuleToString(const Module* ptr, const char* tabs,
         return NULL;
     }
 
-    const size_t length = LENGTH_NEWLINE +
-                          LENGTH_TABS + 19 + strlen(idString) + LENGTH_NEWLINE +
-                          LENGTH_TABS + 9 + strlen(versionString) + LENGTH_NEWLINE +
-                          LENGTH_TABS + 17 * strlen(dependencyDictString) + LENGTH_NEWLINE;
+    const size_t length = 1 +
+                          LENGTH_TABS + 19 + strlen(idString) + 1 +
+                          LENGTH_TABS + 9 + strlen(versionString) + 1 +
+                          LENGTH_TABS + 17 + strlen(dependencyDictString) + 1;
 
-    char* result = malloc(length * sizeof(char));
+    char* result = malloc((length + 1) * sizeof(char));
     if (!result) {
         free(subTab);
         free(idString);
@@ -245,7 +244,7 @@ char* internalModuleToString(const Module* ptr, const char* tabs,
         free(dependencyDictString);
         return NULL;
     }
-    snprintf(result, length,
+    snprintf(result, length + 1,
              "\n"
              "%sResource Location: %s\n"
              "%sVersion: %s\n"
@@ -296,7 +295,7 @@ Version *newVersion(const ResourceLocation* id, const VersionValue versionValue)
     assert(!!versionValue); // VersionValue for Version is NULL
     const size_t versionValueLength = strlen(versionValue);
     const Version version = {id, versionValue};
-    Version* ptr = malloc(sizeof(*ptr) + versionValueLength * sizeof(char));
+    Version* ptr = malloc(sizeof(*ptr) + (versionValueLength + 1) * sizeof(char));
     if (!ptr) {
         return NULL;
     }
@@ -318,15 +317,15 @@ char* internalVersionToString(const Version* ptr, const char* tabs)
         return NULL;
     }
 
-    const size_t length = LENGTH_NEWLINE +
-        LENGTH_TABS + 19 + strlen(idString) + LENGTH_NEWLINE +
-            LENGTH_TABS + 14 + strlen(ptr->versionValue) + LENGTH_NEWLINE;
-    char* result = malloc(length * sizeof(char));
+    const size_t length = 1 +
+        LENGTH_TABS + 19 + strlen(idString) + 1 +
+            LENGTH_TABS + 14 + strlen(ptr->versionValue) + 1;
+    char* result = malloc((length + 1) * sizeof(char));
     if (!result) {
         free(idString);
         return NULL;
     }
-    snprintf(result, length,
+    snprintf(result, length + 1,
         "\n"
         "%sResource Location: %s\n"
         "%sVersionValue: %s\n",
@@ -373,15 +372,15 @@ char* internalVersionComparatorToString(const VersionComparator* ptr, const char
         return NULL;
     }
 
-    const size_t length = LENGTH_NEWLINE +
-        LENGTH_TABS + 19 + strlen(idString) + LENGTH_NEWLINE;
+    const size_t length = 1 +
+        LENGTH_TABS + 19 + strlen(idString) + 1;
 
-    char* result = malloc(length * sizeof(char));
+    char* result = malloc((length + 1) * sizeof(char));
     if (!result) {
         free(idString);
         return NULL;
     }
-    snprintf(result, length,
+    snprintf(result, length + 1,
         "\n"
         "%sResource Location: %s\n",
         tabs, idString);
@@ -486,9 +485,9 @@ char* internalDependencyDictToString(const DependencyDict* ptr, const char* tabs
     assert(!!ptr->id->_total); // Dependency Dict ID is Broken
     assert(!!tabs); // Tabs for Dependency Dict is NULL
     const size_t LENGTH_TABS = strlen(tabs);
-    char* subTab = malloc((LENGTH_TABS + LENGTH_TAB) * sizeof(char));
+    char* subTab = malloc((LENGTH_TABS + 1 + 1) * sizeof(char));
     if (!subTab) return NULL;
-    snprintf(subTab, LENGTH_TABS + LENGTH_TAB + 1, "%s\t", tabs);
+    snprintf(subTab, LENGTH_TABS + 1 + 1, "%s\t", tabs);
 
     char* idString = resourceLocationToString(ptr->id);
     if (!idString) {
@@ -496,16 +495,16 @@ char* internalDependencyDictToString(const DependencyDict* ptr, const char* tabs
         return NULL;
     }
     if (pointerInPointerArray(ptr, ignored, ignoredLength)) {
-        const size_t length = LENGTH_NEWLINE +
-        LENGTH_TABS + 19 + strlen(idString) + LENGTH_NEWLINE;
+        const size_t length = 1 +
+        LENGTH_TABS + 19 + strlen(idString) + 1;
 
-        char* result = malloc(length * sizeof(char));
+        char* result = malloc((length + 1) * sizeof(char));
         if (!result) {
             free(subTab);
             free(idString);
             return NULL;
         }
-        snprintf(result, length,
+        snprintf(result, length + 1,
             "\n"
             "%sResource Location: %s\n",
             tabs, idString
@@ -546,12 +545,12 @@ char* internalDependencyDictToString(const DependencyDict* ptr, const char* tabs
         return NULL;
     }
 
-    const size_t length = LENGTH_NEWLINE +
-        LENGTH_TABS + 19 + strlen(idString) + LENGTH_NEWLINE +
-        LENGTH_TABS + 24 + strlen(dependencyDictBottomString) + LENGTH_NEWLINE +
-        LENGTH_TABS + 21 + strlen(dependencyDictTopString) + LENGTH_NEWLINE;
+    const size_t length = 1 +
+        LENGTH_TABS + 19 + strlen(idString) + 1 +
+        LENGTH_TABS + 24 + strlen(dependencyDictBottomString) + 1 +
+        LENGTH_TABS + 21 + strlen(dependencyDictTopString) + 1;
 
-    char* result = malloc(length * sizeof(char));
+    char* result = malloc((length + 1) * sizeof(char));
     if (!result) {
         free(subTab);
         free(idString);
@@ -560,7 +559,7 @@ char* internalDependencyDictToString(const DependencyDict* ptr, const char* tabs
         free(dependencyDictTopString);
         return NULL;
     }
-    snprintf(result, length,
+    snprintf(result, length + 1,
         "\n"
         "%sResource Location: %s\n"
         "%sDependency Dict Bottom: %s\n"
@@ -607,11 +606,11 @@ char* internalDependencyDictElementToString(const DependencyDictElement* ptr, co
         && !!ptr->versionComparator->id->_total); // No comparison function for Version Comparator for Dependency Dict Element
     assert(!!tabs); // Tabs for Dependency Dict Element is NULL
     const size_t LENGTH_TABS = strlen(tabs);
-    char* subTab = malloc((LENGTH_TABS + LENGTH_TAB) * sizeof(char));
+    char* subTab = malloc((LENGTH_TABS + 1 + 1) * sizeof(char));
     if (!subTab) {
         return NULL;
     }
-    snprintf(subTab, LENGTH_TABS + LENGTH_TAB + 1, "%s\t", tabs);
+    snprintf(subTab, LENGTH_TABS + 1 + 1, "%s\t", tabs);
 
     if (pointerInPointerArray(ptr, ignored, ignoredLength)) {
         char* idString = resourceLocationToString(ptr->id);
@@ -619,8 +618,8 @@ char* internalDependencyDictElementToString(const DependencyDictElement* ptr, co
             free(subTab);
             return NULL;
         }
-        const size_t length = LENGTH_NEWLINE +
-        LENGTH_TABS + 19 + strlen(idString) + LENGTH_NEWLINE;
+        const size_t length = 1 +
+        LENGTH_TABS + 19 + strlen(idString) + 1;
 
         char* result = malloc(length * sizeof(char));
         if (!result) {
@@ -692,15 +691,15 @@ char* internalDependencyDictElementToString(const DependencyDictElement* ptr, co
         return NULL;
     }
 
-    const size_t length = LENGTH_NEWLINE +
-        LENGTH_TABS + 19 + strlen(idString) + LENGTH_NEWLINE +
-        LENGTH_TABS + 12 + strlen(dependencyString) + LENGTH_NEWLINE +
-        LENGTH_TABS + 20 + strlen(versionComparatorString) + LENGTH_NEWLINE +
-        LENGTH_TABS + 7 + MAX_LENGTH_NUMBER + LENGTH_NEWLINE +
-        LENGTH_TABS + 14 + strlen(nextElementString) + LENGTH_NEWLINE +
-        LENGTH_TABS + 18 + strlen(previousElementString) + LENGTH_NEWLINE;
+    const size_t length = 1 +
+        LENGTH_TABS + 19 + strlen(idString) + 1 +
+        LENGTH_TABS + 12 + strlen(dependencyString) + 1 +
+        LENGTH_TABS + 20 + strlen(versionComparatorString) + 1 +
+        LENGTH_TABS + 7 + MAX_LENGTH_NUMBER + 1 +
+        LENGTH_TABS + 14 + strlen(nextElementString) + 1 +
+        LENGTH_TABS + 18 + strlen(previousElementString) + 1;
 
-    char* result = malloc(length * sizeof(char));
+    char* result = malloc((length + 1) * sizeof(char));
     if (!result) {
         free(subTab);
         free(idString);
@@ -711,7 +710,7 @@ char* internalDependencyDictElementToString(const DependencyDictElement* ptr, co
         free(previousElementString);
         return NULL;
     }
-    snprintf(result, length,
+    snprintf(result, length + 1,
         "\n"
         "%sResource Location: %s\n"
         "%sDependency: %s\n"

@@ -92,7 +92,7 @@ typedef struct DependencyDictStruct
 
 VersionComparatorResult comparePrereleases(const char* inputPrerelease, const char* comparisonPrerelease,
     size_t inputPrereleaseLength, size_t comparisonPrereleaseLength);
-const VersionComparatorResult semver2_0_0Apply(const Version* input, const Version* comparison);
+VersionComparatorResult semver2_0_0Apply(const Version* input, const Version* comparison);
 extern const VersionComparator* getSemver2_0_0Comparator();
 void initVersionComparators();
 void freeVersionComparators();

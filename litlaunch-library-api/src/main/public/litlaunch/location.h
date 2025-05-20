@@ -24,7 +24,7 @@ typedef const char* ResourceLocationNamespace;
 typedef const char* ResourceLocationPath;
 typedef const char* ResourceLocationTotal;
 
-extern const ResourceLocationNamespace litlaunchNamespace;
+extern const ResourceLocationNamespace litLaunchNamespace;
 
 typedef struct ResourceLocationStruct
 {

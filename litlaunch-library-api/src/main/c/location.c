@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-const ResourceLocationNamespace litlaunchNamespace = "litlaunch";
+const ResourceLocationNamespace litLaunchNamespace = "litlaunch";
 
 const ResourceLocation *newResourceLocation(const ResourceLocationNamespace _namespace,
                                             const ResourceLocationPath _path)
@@ -58,11 +58,11 @@ char* resourceLocationToString(const ResourceLocation *ptr)
 {
     assert(!!ptr); // Resource Location is NULL
     assert(!!ptr->_namespace && !!ptr->_path && !!ptr->_total); // Resource Location is Broken
-    char* result = malloc(strlen(ptr->_total) * sizeof(char));
+    char* result = malloc((strlen(ptr->_total) + 1) * sizeof(char));
     if (!result) {
         return NULL;
     }
-    memcpy(result, ptr->_total, strlen(ptr->_total));
+    memcpy(result, ptr->_total, strlen(ptr->_total) + 1);
     return result;
 }
 

@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
-project(litlaunch-library-api-tests VERSION 0.1.1.1 LANGUAGES C)
+project(litlaunch-library-api-tests VERSION 0.1.1.2 LANGUAGES C)
 set(CMAKE_C_STANDARD 90)
 
 
 find_library(LITLAUNCH_LIBRARY_API
-        NAMES litlaunch-library-api-0.2.4+build.0
+        NAMES litlaunch-library-api-0.2.4+build.1
         PATHS $ENV{BUILD_LOC}/litlaunch-library-api)
 
 if (NOT LITLAUNCH_LIBRARY_API)
@@ -18,7 +18,7 @@ else ()
     set_target_properties(
             litlaunch-library-api-tests
             PROPERTIES
-            OUTPUT_NAME "litlaunch-library-api-tests-0.1.1+build.1"
+            OUTPUT_NAME "litlaunch-library-api-tests-0.1.1+build.2"
     )
     add_custom_command(TARGET litlaunch-library-api-tests POST_BUILD
             COMMAND "${CMAKE_COMMAND}" -E copy

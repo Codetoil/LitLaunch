@@ -24,15 +24,15 @@
 Module *initLibraryApiTests(Module* apiModule)
 {
     const ResourceLocation *versionLocation =
-        newResourceLocation(litlaunchNamespace, "litlaunch_library_api_tests_version");
+        newResourceLocation(litLaunchNamespace, "litlaunch_library_api_tests_version");
     const Version *version = newVersion(versionLocation, "0.1.1+build.1");
     const ResourceLocation *moduleLocation =
-        newResourceLocation(litlaunchNamespace, "litlaunch_library_api_tests");
+        newResourceLocation(litLaunchNamespace, "litlaunch_library_api_tests");
     const ResourceLocation *dependencyDictLocation =
-        newResourceLocation(litlaunchNamespace, "litlaunch_library_api_tests_dependency_dict");
+        newResourceLocation(litLaunchNamespace, "litlaunch_library_api_tests_dependency_dict");
     DependencyDict *dependencyDict = newDependencyDict(dependencyDictLocation);
     const ResourceLocation *apiDependencyDictElementLocation =
-        newResourceLocation(litlaunchNamespace, "litlaunch_library_api_tests_api_dependency_dict_element");
+        newResourceLocation(litLaunchNamespace, "litlaunch_library_api_tests_api_dependency_dict_element");
     addToDependencyDict(dependencyDict, apiDependencyDictElementLocation, apiModule, getSemver2_0_0Comparator(),
         0b00000000);
     return newModule(moduleLocation, version, dependencyDict);
