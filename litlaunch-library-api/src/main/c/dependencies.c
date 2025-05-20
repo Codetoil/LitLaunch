@@ -625,7 +625,7 @@ char* internalDependencyDictElementToString(const DependencyDictElement* ptr, co
         free(subTab);
         return NULL;
     }
-    char* versionString = versionToString(ptr->version);
+    char* versionString = internalVersionToString(ptr->version, subTab);
     if (!versionString) {
         free(subTab);
         free(idString);

@@ -26,7 +26,7 @@ Module *initLibraryApiTests(Module* apiModule)
 {
     const ResourceLocation *versionLocation =
         newResourceLocation(litLaunchNamespace, "litlaunch_library_api_tests_version");
-    const Version *version = newVersion(versionLocation, "0.1.1+build.3");
+    const Version *version = newVersion(versionLocation, "0.1.1+build.4");
     const ResourceLocation *moduleLocation =
         newResourceLocation(litLaunchNamespace, "litlaunch_library_api_tests");
     const ResourceLocation *dependencyDictLocation =
@@ -36,7 +36,7 @@ Module *initLibraryApiTests(Module* apiModule)
         newResourceLocation(litLaunchNamespace, "litlaunch_library_api_tests_api_dependency_dict_element");
     const ResourceLocation *apiVersionLocation =
         newResourceLocation(litLaunchNamespace, "litlaunch_library_api_version");
-    const Version *apiVersion = newVersion(apiVersionLocation, "0.2.4+build.2");
+    const Version *apiVersion = newVersion(apiVersionLocation, "0.2.4+build.3");
     addToDependencyDict(dependencyDict, apiDependencyDictElementLocation, apiModule,
         apiVersion, getSemver2_0_0Comparator(), 0b00000000);
     return newModule(moduleLocation, version, dependencyDict);
